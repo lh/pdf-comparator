@@ -262,7 +262,6 @@ A: The tool will display them as-is. You'll need to account for page size differ
 Found a bug? Have a feature request?
 
 - **GitHub Issues**: https://github.com/LH/pdf-comparator/issues
-- **Email**: [your-email@example.com]
 
 ---
 
