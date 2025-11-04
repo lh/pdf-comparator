@@ -166,12 +166,14 @@ class PDFComparisonViewModel: ObservableObject {
         case .base:
             if let url = basePDFURL {
                 basePDF = PDFDocument(url: url)
+                resetTransformation()  // Reset transformations on reload
                 // Re-establish monitoring after reload
                 setupFileMonitor(for: url, type: .base)
             }
         case .overlay:
             if let url = overlayPDFURL {
                 overlayPDF = PDFDocument(url: url)
+                resetTransformation()  // Reset transformations on reload
                 // Re-establish monitoring after reload
                 setupFileMonitor(for: url, type: .overlay)
             }
