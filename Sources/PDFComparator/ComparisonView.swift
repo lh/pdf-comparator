@@ -57,6 +57,8 @@ struct KeyHandlerView: NSViewRepresentable {
 
 class KeyHandlerNSView: NSView {
     var viewModel: PDFComparisonViewModel?
+    private var isDragging = false
+    private var lastDragLocation: NSPoint?
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -82,7 +84,48 @@ class KeyHandlerNSView: NSView {
     override func mouseDown(with event: NSEvent) {
         // Grab focus on mouse click
         window?.makeFirstResponder(self)
-        super.mouseDown(with: event)
+
+        // Start dragging
+        isDragging = true
+        lastDragLocation = event.locationInWindow
+    }
+
+    override func mouseDragged(with event: NSEvent) {
+        guard isDragging, let lastLocation = lastDragLocation else { return }
+
+        let currentLocation = event.locationInWindow
+        let dx = currentLocation.x - lastLocation.x
+        let dy = currentLocation.y - lastLocation.y
+
+        // Update overlay position
+        viewModel?.nudge(dx: dx, dy: -dy)  // Flip Y for correct direction
+
+        lastDragLocation = currentLocation
+    }
+
+    override func mouseUp(with event: NSEvent) {
+        isDragging = false
+        lastDragLocation = nil
+    }
+
+    override func scrollWheel(with event: NSEvent) {
+        // Use scroll wheel to scale
+        // Hold Option/Alt for fine control
+        let scaleFactor: CGFloat = event.modifierFlags.contains(.option) ? 0.001 : 0.01
+        let delta = event.scrollingDeltaY * scaleFactor
+
+        if let viewModel = viewModel {
+            let newScale = max(0.5, min(2.0, viewModel.overlayScale + delta))
+            viewModel.overlayScale = newScale
+        }
+    }
+
+    override func magnify(with event: NSEvent) {
+        // Trackpad pinch gesture for scaling
+        if let viewModel = viewModel {
+            let newScale = max(0.5, min(2.0, viewModel.overlayScale * (1 + event.magnification)))
+            viewModel.overlayScale = newScale
+        }
     }
 
     override func keyDown(with event: NSEvent) {

@@ -17,14 +17,17 @@ PDF Comparator helps you adjust the output of a PDF rendering program to match a
 - **Dual PDF Loading**: Load a base PDF and an overlay PDF
 - **Translucent Overlay**: Adjust opacity (0-100%) of the overlay PDF to see both documents simultaneously
 - **Interactive Ruler**: Toggle rulers with point measurements for precise alignment (1 pt = 1/72 inch, standard PDF unit)
-- **Nudging Controls**: Use arrow keys to adjust overlay position
-  - Arrow keys: Move 1 point at a time
-  - Shift + Arrow keys: Move 10 points at a time
+- **Position Controls**: Multiple ways to adjust overlay position
+  - **Mouse/Trackpad**: Click and drag anywhere to move overlay
+  - **Arrow keys**: Move 1 point at a time
+  - **Shift + Arrow keys**: Move 10 points at a time
 - **Scaling Controls**: Adjust overlay scale from 50% to 200%
-  - Coarse slider for quick adjustments
-  - Fine controls with ±0.01 increment buttons
-  - Direct text input for precise values
-  - Preset buttons (50%, 75%, 100%, 125%, 150%)
+  - **Trackpad**: Pinch to zoom (natural gesture)
+  - **Mouse wheel**: Scroll to scale (hold Option for fine control)
+  - **Slider**: Quick coarse adjustments
+  - **±0.01 buttons**: Fine increment/decrement
+  - **Text input**: Enter exact values
+  - **Presets**: Quick jump to 50%, 75%, 100%, 125%, 150%
 - **Rotation Controls**: Rotate overlay in any direction
   - ±1° increment buttons for fine adjustment
   - Direct degree input
@@ -68,14 +71,33 @@ Then press Cmd+R to run. The app should automatically activate and come to the f
 2. Click "Load Overlay PDF" to load your program's PDF output
 3. Adjust the overlay opacity slider to see both PDFs (default 30%)
 4. Adjust transformations to align:
-   - **Scale**: Match sizes (use fine controls for ±0.01 precision)
-   - **Rotation**: Align orientation (±1° or 90° increments)
-   - **Flip**: Mirror if needed (horizontal/vertical toggles)
-   - **Position**: Use arrow keys to nudge into place (1pt or 10pt with Shift)
+   - **Position**: Drag with mouse/trackpad or use arrow keys (1pt or 10pt with Shift)
+   - **Scale**: Pinch trackpad, scroll mouse, or use slider/buttons
+   - **Rotation**: ±1° buttons or 90° presets
+   - **Flip**: Toggle horizontal/vertical if needed
 5. Toggle "Show Ruler" for precise measurements (shows **points** - 1 pt = 1/72 inch)
 6. Copy the transformation information to adjust your code
 
 **See [HELP.md](HELP.md) for detailed workflow examples.**
+
+## Quick Controls Reference
+
+### Moving the Overlay
+- **Click and drag**: Move overlay with mouse/trackpad
+- **Arrow keys**: Nudge 1 point at a time
+- **Shift + Arrows**: Nudge 10 points at a time
+
+### Scaling the Overlay
+- **Trackpad pinch**: Natural zoom gesture
+- **Mouse wheel**: Scroll up/down to scale
+- **Option + Wheel**: Fine scaling control (0.1% steps)
+- **Slider**: Visual adjustment
+- **±0.01 buttons**: Precise increments
+
+### Other Controls
+- **Click anywhere**: Focus the window for keyboard shortcuts
+- **Opacity slider**: Adjust transparency
+- **Toggle buttons**: Flip horizontal/vertical, show ruler
 
 ## Understanding Points vs Pixels
 
