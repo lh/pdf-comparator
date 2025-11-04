@@ -8,7 +8,7 @@ struct ComparisonView: View {
         ZStack {
             // Base PDF layer
             if let basePDF = viewModel.basePDF {
-                PDFViewRepresentable(document: basePDF)
+                PDFViewRepresentable(document: basePDF, currentPage: viewModel.currentPage)
             } else {
                 Text("Load Base PDF")
                     .foregroundColor(.secondary)
@@ -17,7 +17,7 @@ struct ComparisonView: View {
             // Overlay PDF layer with transformations
             // Order: translate to origin, scale, rotate, flip, translate back + offset
             if let overlayPDF = viewModel.overlayPDF {
-                PDFViewRepresentable(document: overlayPDF)
+                PDFViewRepresentable(document: overlayPDF, currentPage: viewModel.currentPage)
                     .scaleEffect(
                         x: viewModel.overlayScale * (viewModel.overlayFlipHorizontal ? -1 : 1),
                         y: viewModel.overlayScale * (viewModel.overlayFlipVertical ? -1 : 1),
@@ -184,6 +184,7 @@ class KeyHandlerNSView: NSView {
 // SwiftUI wrapper for PDFView
 struct PDFViewRepresentable: NSViewRepresentable {
     let document: PDFDocument
+    let currentPage: Int
 
     func makeNSView(context: Context) -> PDFView {
         let pdfView = PDFView()
@@ -196,6 +197,11 @@ struct PDFViewRepresentable: NSViewRepresentable {
     func updateNSView(_ pdfView: PDFView, context: Context) {
         if pdfView.document != document {
             pdfView.document = document
+        }
+
+        // Update to show the current page
+        if let page = document.page(at: currentPage) {
+            pdfView.go(to: page)
         }
     }
 }

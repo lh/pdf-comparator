@@ -6,6 +6,7 @@ import UniformTypeIdentifiers
 class PDFComparisonViewModel: ObservableObject {
     @Published var basePDF: PDFDocument?
     @Published var overlayPDF: PDFDocument?
+    @Published var currentPage: Int = 0  // Current page index (0-based)
 
     @Published var overlayOpacity: Double = 0.3
     @Published var overlayOffset: CGSize = .zero
@@ -85,6 +86,25 @@ class PDFComparisonViewModel: ObservableObject {
         """
     }
 
+    var totalPages: Int {
+        max(basePDF?.pageCount ?? 0, overlayPDF?.pageCount ?? 0)
+    }
+
+    var pageDisplayString: String {
+        guard totalPages > 0 else { return "No pages" }
+        return "Page \(currentPage + 1) of \(totalPages)"
+    }
+
+    func nextPage() {
+        guard currentPage < totalPages - 1 else { return }
+        currentPage += 1
+    }
+
+    func previousPage() {
+        guard currentPage > 0 else { return }
+        currentPage -= 1
+    }
+
     func loadBasePDF() {
         let panel = NSOpenPanel()
         panel.allowedContentTypes = [UTType.pdf]
@@ -95,6 +115,7 @@ class PDFComparisonViewModel: ObservableObject {
             if response == .OK, let url = panel.url {
                 self.basePDFURL = url
                 self.basePDF = PDFDocument(url: url)
+                self.currentPage = 0  // Reset to first page
                 self.resetTransformation()  // Auto-reset when loading new PDF
                 self.setupFileMonitor(for: url, type: .base)
             }
@@ -111,6 +132,7 @@ class PDFComparisonViewModel: ObservableObject {
             if response == .OK, let url = panel.url {
                 self.overlayPDFURL = url
                 self.overlayPDF = PDFDocument(url: url)
+                self.currentPage = 0  // Reset to first page
                 self.resetTransformation()  // Auto-reset when loading new PDF
                 self.setupFileMonitor(for: url, type: .overlay)
             }

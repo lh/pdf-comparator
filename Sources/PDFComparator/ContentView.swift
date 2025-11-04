@@ -26,6 +26,27 @@ struct ContentView: View {
 
                 Spacer()
 
+                // Page navigation
+                if viewModel.totalPages > 1 {
+                    Button(action: { viewModel.previousPage() }) {
+                        Image(systemName: "chevron.left")
+                    }
+                    .disabled(viewModel.currentPage == 0)
+                    .help("Previous page")
+
+                    Text(viewModel.pageDisplayString)
+                        .font(.system(size: 11))
+                        .frame(minWidth: 80)
+
+                    Button(action: { viewModel.nextPage() }) {
+                        Image(systemName: "chevron.right")
+                    }
+                    .disabled(viewModel.currentPage >= viewModel.totalPages - 1)
+                    .help("Next page")
+
+                    Spacer()
+                }
+
                 Toggle("Show Ruler", isOn: $viewModel.showRuler)
 
                 Toggle("Scale Origin", isOn: $viewModel.showScaleOrigin)
