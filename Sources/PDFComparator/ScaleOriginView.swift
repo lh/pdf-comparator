@@ -125,10 +125,10 @@ class ScaleOriginNSView: NSView {
         let nudgeAmount: CGFloat = event.modifierFlags.contains(.shift) ? 10 : 1
 
         switch Int(event.keyCode) {
-        case 126: // Up arrow
+        case 126: // Up arrow - move crosshair up on screen
             viewModel.scaleOrigin.y += nudgeAmount
             needsDisplay = true
-        case 125: // Down arrow
+        case 125: // Down arrow - move crosshair down on screen
             viewModel.scaleOrigin.y -= nudgeAmount
             needsDisplay = true
         case 123: // Left arrow
