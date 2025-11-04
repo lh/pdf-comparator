@@ -199,7 +199,17 @@ struct PDFViewRepresentable: NSViewRepresentable {
             pdfView.document = document
         }
 
-        // Update to show the current page
+        // Update to show the current page only if it's valid and different
+        guard currentPage >= 0, currentPage < document.pageCount else { return }
+
+        if let currentPDFPage = pdfView.currentPage {
+            let index = document.index(for: currentPDFPage)
+            if index == currentPage {
+                // Already on the correct page, don't navigate
+                return
+            }
+        }
+
         if let page = document.page(at: currentPage) {
             pdfView.go(to: page)
         }
