@@ -52,11 +52,13 @@ class ScaleOriginNSView: NSView {
         )
 
         // Draw crosshair with center gap
-        // Use brighter color when in drag mode
-        let color = viewModel.dragScaleOrigin ? NSColor.green : NSColor.green.withAlphaComponent(0.8)
+        // Use dark blue when in move mode, light green otherwise
+        let color = viewModel.dragScaleOrigin ?
+            NSColor(red: 0.0, green: 0.3, blue: 0.8, alpha: 1.0) :  // Dark blue
+            NSColor.green.withAlphaComponent(0.8)  // Light green
         color.setStroke()
         let path = NSBezierPath()
-        path.lineWidth = viewModel.dragScaleOrigin ? 1.5 : 1.0
+        path.lineWidth = 1.0
 
         let size: CGFloat = 30
         let gap: CGFloat = 6
@@ -79,11 +81,24 @@ class ScaleOriginNSView: NSView {
     override func mouseDown(with event: NSEvent) {
         guard let viewModel = viewModel else { return }
 
-        // Only allow dragging if drag mode is enabled
+        // Only allow dragging if move mode is enabled
         guard viewModel.dragScaleOrigin else { return }
+
+        // Grab keyboard focus for arrow keys
+        window?.makeFirstResponder(self)
 
         isDragging = true
         showLabel()
+    }
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        // Auto-grab focus when in move mode
+        if let viewModel = viewModel, viewModel.dragScaleOrigin {
+            DispatchQueue.main.async {
+                self.window?.makeFirstResponder(self)
+            }
+        }
     }
 
     override func mouseDragged(with event: NSEvent) {
@@ -102,6 +117,29 @@ class ScaleOriginNSView: NSView {
     override func mouseUp(with event: NSEvent) {
         isDragging = false
         hideLabel()
+    }
+
+    override func keyDown(with event: NSEvent) {
+        guard let viewModel = viewModel else { return }
+
+        let nudgeAmount: CGFloat = event.modifierFlags.contains(.shift) ? 10 : 1
+
+        switch Int(event.keyCode) {
+        case 126: // Up arrow
+            viewModel.scaleOrigin.y += nudgeAmount
+            needsDisplay = true
+        case 125: // Down arrow
+            viewModel.scaleOrigin.y -= nudgeAmount
+            needsDisplay = true
+        case 123: // Left arrow
+            viewModel.scaleOrigin.x -= nudgeAmount
+            needsDisplay = true
+        case 124: // Right arrow
+            viewModel.scaleOrigin.x += nudgeAmount
+            needsDisplay = true
+        default:
+            super.keyDown(with: event)
+        }
     }
 
     private func showLabel() {

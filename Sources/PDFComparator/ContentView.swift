@@ -31,8 +31,8 @@ struct ContentView: View {
                 Toggle("Scale Origin", isOn: $viewModel.showScaleOrigin)
 
                 if viewModel.showScaleOrigin {
-                    Toggle("Drag Crosshair", isOn: $viewModel.dragScaleOrigin)
-                        .help("When enabled, dragging moves the crosshair instead of the overlay")
+                    Toggle("Move Crosshair", isOn: $viewModel.dragScaleOrigin)
+                        .help("When enabled, mouse and arrow keys move the crosshair instead of the overlay")
                 }
             }
         }
