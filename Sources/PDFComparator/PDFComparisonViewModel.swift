@@ -13,11 +13,11 @@ class PDFComparisonViewModel: ObservableObject {
 
     @Published var showRuler: Bool = false
 
-    // Transformation vector for output
+    // Transformation vector for output (scale then translate - natural order of operations)
     var transformationVector: String {
         """
-        Translation: (\(String(format: "%.2f", overlayOffset.width)), \(String(format: "%.2f", overlayOffset.height)))
         Scale: \(String(format: "%.4f", overlayScale))
+        Translation: (\(String(format: "%.2f", overlayOffset.width)), \(String(format: "%.2f", overlayOffset.height)))
         Opacity: \(String(format: "%.2f", overlayOpacity))
         """
     }

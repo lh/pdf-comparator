@@ -52,5 +52,12 @@ Then press Cmd+R to run. The app should automatically activate and come to the f
 
 ## Requirements
 
-- macOS 13.0 or later
+- macOS 14.0 or later
 - Xcode 15.0 or later (for building)
+
+## App Store Distribution
+
+Want to submit this to the Mac App Store? See the comprehensive guide:
+**[APP_STORE_GUIDE.md](APP_STORE_GUIDE.md)**
+
+The app is fully functional and ready for App Store submission. The guide walks you through creating a proper Xcode project, adding required assets, and submitting for review.
