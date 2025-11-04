@@ -16,7 +16,7 @@ class PDFComparisonViewModel: ObservableObject {
     // Transformation vector for output (scale then translate - natural order of operations)
     var transformationVector: String {
         """
-        Scale: \(String(format: "%.4f", overlayScale))
+        Scale: \(String(format: "%.3f", overlayScale))
         Translation: (\(String(format: "%.2f", overlayOffset.width)), \(String(format: "%.2f", overlayOffset.height)))
         Opacity: \(String(format: "%.2f", overlayOpacity))
         """

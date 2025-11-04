@@ -10,7 +10,11 @@ A macOS application for comparing two PDF files side-by-side with overlay capabi
 - **Nudging Controls**: Use arrow keys to adjust overlay position
   - Arrow keys: Move 1 pixel at a time
   - Shift + Arrow keys: Move 10 pixels at a time
-- **Scaling Controls**: Adjust overlay scale from 50% to 200% with presets
+- **Scaling Controls**: Adjust overlay scale from 50% to 200%
+  - Coarse slider for quick adjustments
+  - Fine controls with ±0.01 increment buttons
+  - Direct text input for precise values
+  - Preset buttons (50%, 75%, 100%, 125%, 150%)
 - **Transformation Vector**: Real-time display of translation, scale, and opacity values
 - **Copy to Clipboard**: Export transformation parameters
 

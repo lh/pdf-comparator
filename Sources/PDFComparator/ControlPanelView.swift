@@ -25,13 +25,40 @@ struct ControlPanelView: View {
             Divider()
 
             // Scale control
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 8) {
                 Text("Overlay Scale")
                     .font(.headline)
+
+                // Coarse slider
                 HStack {
                     Slider(value: $viewModel.overlayScale, in: 0.5...2.0)
                     Text("\(String(format: "%.2f", viewModel.overlayScale))x")
                         .frame(width: 55, alignment: .trailing)
+                }
+
+                // Fine controls with text field
+                HStack(spacing: 8) {
+                    Button("-0.01") {
+                        viewModel.overlayScale = max(0.5, viewModel.overlayScale - 0.01)
+                    }
+                    .frame(width: 50)
+
+                    TextField("Scale", value: $viewModel.overlayScale, format: .number.precision(.fractionLength(3)))
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: 70)
+                        .onSubmit {
+                            // Clamp to valid range
+                            viewModel.overlayScale = max(0.5, min(2.0, viewModel.overlayScale))
+                        }
+
+                    Button("+0.01") {
+                        viewModel.overlayScale = min(2.0, viewModel.overlayScale + 0.01)
+                    }
+                    .frame(width: 50)
+
+                    Text("(±0.01)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
 
                 // Preset scale buttons
