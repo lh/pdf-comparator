@@ -17,6 +17,11 @@ PDF Comparator helps you adjust the output of a PDF rendering program to match a
 - **Dual PDF Loading**: Load a base PDF and an overlay PDF
 - **Translucent Overlay**: Adjust opacity (0-100%) of the overlay PDF to see both documents simultaneously
 - **Interactive Ruler**: Toggle rulers with point measurements for precise alignment (1 pt = 1/72 inch, standard PDF unit)
+- **Scale Origin Point**: Draggable green crosshair defines the center point for scaling operations
+  - Toggle on/off in toolbar
+  - Drag crosshair to desired anchor point
+  - Scaling happens around this point instead of center
+  - Useful for aligning specific features while scaling
 - **Position Controls**: Multiple ways to adjust overlay position
   - **Mouse/Trackpad**: Click and drag anywhere to move overlay
   - **Arrow keys**: Move 1 point at a time
@@ -102,6 +107,7 @@ Then press Cmd+R to run. The app should automatically activate and come to the f
 - **Slider**: Visual adjustment
 - **±0.01 buttons**: Precise increments
 - **Lock toggle**: Prevent accidental changes (disables all scale controls)
+- **Scale Origin**: Enable green crosshair, drag to feature you want to keep fixed while scaling
 
 ### Rotating the Overlay
 - **Trackpad rotate**: Two-finger rotation gesture
@@ -112,7 +118,8 @@ Then press Cmd+R to run. The app should automatically activate and come to the f
 ### Other Controls
 - **Click anywhere**: Focus the window for keyboard shortcuts
 - **Opacity slider**: Adjust transparency
-- **Toggle buttons**: Flip horizontal/vertical, show ruler, lock scale/rotation
+- **Toolbar toggles**: Show Ruler, Scale Origin
+- **Panel toggles**: Flip horizontal/vertical, lock scale/rotation
 
 ## Coordinate Systems Explained
 

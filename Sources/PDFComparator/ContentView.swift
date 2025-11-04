@@ -27,6 +27,8 @@ struct ContentView: View {
                 Spacer()
 
                 Toggle("Show Ruler", isOn: $viewModel.showRuler)
+
+                Toggle("Scale Origin", isOn: $viewModel.showScaleOrigin)
             }
         }
     }

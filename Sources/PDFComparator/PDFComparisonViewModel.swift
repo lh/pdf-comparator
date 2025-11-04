@@ -18,6 +18,10 @@ class PDFComparisonViewModel: ObservableObject {
     @Published var lockScale: Bool = false
     @Published var lockRotation: Bool = false
 
+    // Scale origin point (center of scaling)
+    @Published var showScaleOrigin: Bool = false
+    @Published var scaleOrigin: CGPoint = .zero  // Relative to view center
+
     // Coordinate system configuration
     // Default: Bottom-Left origin (PostScript/PDF standard)
     // Up = positive Y, Right = positive X

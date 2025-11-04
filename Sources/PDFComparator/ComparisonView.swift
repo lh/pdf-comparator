@@ -15,14 +15,18 @@ struct ComparisonView: View {
             }
 
             // Overlay PDF layer with transformations
-            // Order: scale, rotate, flip, translate
+            // Order: translate to origin, scale, rotate, flip, translate back + offset
             if let overlayPDF = viewModel.overlayPDF {
                 PDFViewRepresentable(document: overlayPDF)
                     .scaleEffect(
                         x: viewModel.overlayScale * (viewModel.overlayFlipHorizontal ? -1 : 1),
-                        y: viewModel.overlayScale * (viewModel.overlayFlipVertical ? -1 : 1)
+                        y: viewModel.overlayScale * (viewModel.overlayFlipVertical ? -1 : 1),
+                        anchor: .center
                     )
-                    .rotationEffect(.degrees(viewModel.overlayRotation))
+                    .rotationEffect(.degrees(viewModel.overlayRotation), anchor: .center)
+                    // Apply scale origin offset: move opposite direction before scale, then compensate
+                    .offset(x: viewModel.scaleOrigin.x * (1 - viewModel.overlayScale),
+                           y: viewModel.scaleOrigin.y * (1 - viewModel.overlayScale))
                     .offset(viewModel.overlayOffset)
                     .opacity(viewModel.overlayOpacity)
             }
@@ -32,7 +36,12 @@ struct ComparisonView: View {
                 RulerOverlay()
             }
 
-            // Key handler overlay
+            // Scale origin crosshair
+            if viewModel.showScaleOrigin {
+                ScaleOriginView(viewModel: viewModel)
+            }
+
+            // Key handler overlay (must be on top to receive events)
             KeyHandlerView(viewModel: viewModel)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
