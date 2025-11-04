@@ -40,7 +40,9 @@ class PDFComparisonViewModel: ObservableObject {
         let pageHeight = pageBounds.height
 
         // Convert from center-relative to bottom-left origin
-        // scaleOrigin is relative to view center, need to add half page size
+        // scaleOrigin.y is NEGATIVE when visually at top (stored as PDF Y+ up from center)
+        // Visual top = PDF pageHeight, visual bottom = PDF 0
+        // When scaleOrigin.y is negative (visual top), we want high PDF Y value
         let xFromBottomLeft = (pageWidth / 2) + scaleOrigin.x
         let yFromBottomLeft = (pageHeight / 2) + scaleOrigin.y
 

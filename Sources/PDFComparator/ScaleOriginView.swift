@@ -48,7 +48,7 @@ class ScaleOriginNSView: NSView {
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
         let crosshairPos = CGPoint(
             x: center.x + viewModel.scaleOrigin.x,
-            y: center.y - viewModel.scaleOrigin.y  // Flip Y for NSView coordinates
+            y: center.y + viewModel.scaleOrigin.y  // NSView Y+ = up, same as PDF
         )
 
         // Draw crosshair with center gap
@@ -108,7 +108,7 @@ class ScaleOriginNSView: NSView {
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
 
         let newX = location.x - center.x
-        let newY = -(location.y - center.y)  // Flip Y back to PDF coordinates
+        let newY = (location.y - center.y)  // NSView Y+ = up, same as PDF, no flip needed!
 
         viewModel.scaleOrigin = CGPoint(x: newX, y: newY)
         needsDisplay = true
