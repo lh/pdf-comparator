@@ -28,6 +28,18 @@ class PDFComparisonViewModel: ObservableObject {
     @Published var yAxisUp: Bool = true      // true = up is positive, false = up is negative
     @Published var xAxisRight: Bool = true   // true = right is positive, false = right is negative
 
+    // File watching
+    @Published var showReloadAlert: Bool = false
+    private var basePDFURL: URL?
+    private var overlayPDFURL: URL?
+    private var fileMonitors: [DispatchSourceFileSystemObject] = []
+    private var pendingReloadType: ReloadType?
+
+    enum ReloadType {
+        case base
+        case overlay
+    }
+
     var coordinateSystemName: String {
         switch (xAxisRight, yAxisUp) {
         case (true, true):   return "Bottom-Left (PDF Standard)"
@@ -79,7 +91,10 @@ class PDFComparisonViewModel: ObservableObject {
 
         panel.begin { response in
             if response == .OK, let url = panel.url {
+                self.basePDFURL = url
                 self.basePDF = PDFDocument(url: url)
+                self.resetTransformation()  // Auto-reset when loading new PDF
+                self.setupFileMonitor(for: url, type: .base)
             }
         }
     }
@@ -92,9 +107,74 @@ class PDFComparisonViewModel: ObservableObject {
 
         panel.begin { response in
             if response == .OK, let url = panel.url {
+                self.overlayPDFURL = url
                 self.overlayPDF = PDFDocument(url: url)
+                self.resetTransformation()  // Auto-reset when loading new PDF
+                self.setupFileMonitor(for: url, type: .overlay)
             }
         }
+    }
+
+    private func setupFileMonitor(for url: URL, type: ReloadType) {
+        // Cancel existing monitors
+        fileMonitors.forEach { $0.cancel() }
+        fileMonitors.removeAll()
+
+        let fileDescriptor = open(url.path, O_EVTONLY)
+        guard fileDescriptor >= 0 else { return }
+
+        let source = DispatchSource.makeFileSystemObjectSource(
+            fileDescriptor: fileDescriptor,
+            eventMask: [.write, .delete, .rename],
+            queue: DispatchQueue.main
+        )
+
+        source.setEventHandler { [weak self] in
+            guard let self = self else { return }
+            Task { @MainActor in
+                self.pendingReloadType = type
+                self.showReloadAlert = true
+            }
+        }
+
+        source.setCancelHandler {
+            close(fileDescriptor)
+        }
+
+        source.resume()
+        fileMonitors.append(source)
+    }
+
+    func reloadPDF() {
+        guard let reloadType = pendingReloadType else { return }
+
+        switch reloadType {
+        case .base:
+            if let url = basePDFURL {
+                basePDF = PDFDocument(url: url)
+            }
+        case .overlay:
+            if let url = overlayPDFURL {
+                overlayPDF = PDFDocument(url: url)
+            }
+        }
+
+        showReloadAlert = false
+        pendingReloadType = nil
+    }
+
+    var reloadMessage: String {
+        guard let reloadType = pendingReloadType else { return "" }
+        switch reloadType {
+        case .base:
+            return "Base PDF has been modified on disk."
+        case .overlay:
+            return "Overlay PDF has been modified on disk."
+        }
+    }
+
+    deinit {
+        fileMonitors.forEach { $0.cancel() }
     }
 
     func nudge(dx: CGFloat, dy: CGFloat) {

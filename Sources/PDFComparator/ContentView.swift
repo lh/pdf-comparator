@@ -31,5 +31,15 @@ struct ContentView: View {
                 Toggle("Scale Origin", isOn: $viewModel.showScaleOrigin)
             }
         }
+        .alert("PDF Changed", isPresented: $viewModel.showReloadAlert) {
+            Button("Reload") {
+                viewModel.reloadPDF()
+            }
+            Button("Ignore", role: .cancel) {
+                viewModel.showReloadAlert = false
+            }
+        } message: {
+            Text(viewModel.reloadMessage)
+        }
     }
 }
