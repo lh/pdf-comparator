@@ -207,4 +207,4 @@ Contributions are welcome! Feel free to:
 
 ### GitHub Repository
 
-Coming soon: https://github.com/lherbertGit/pdf-comparator
+https://github.com/LH/pdf-comparator
