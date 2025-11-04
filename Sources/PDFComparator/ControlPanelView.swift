@@ -98,9 +98,9 @@ struct ControlPanelView: View {
 
             Divider()
 
-            // Transformation vector output
+            // Transformation information output
             VStack(alignment: .leading) {
-                Text("Transformation Vector")
+                Text("Transformation Information")
                     .font(.headline)
 
                 Text(viewModel.transformationVector)
