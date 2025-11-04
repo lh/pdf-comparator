@@ -235,18 +235,17 @@ struct PDFViewRepresentable: NSViewRepresentable {
         let pageBounds = page.bounds(for: .mediaBox)
         let viewBounds = pdfView.bounds
 
-        // Get the page's bounds in view coordinates
-        let pageRect = pdfView.convert(pageBounds, from: page)
+        // Convert PDF point (0, 0) to view coordinates
+        // Note: pageBounds.origin might not be (0,0), so use that as the PDF origin
+        let pdfOriginInPDFCoords = CGPoint(x: pageBounds.minX, y: pageBounds.minY)
+        let pdfOriginInViewCoords = pdfView.convert(pdfOriginInPDFCoords, from: page)
 
         // View center
         let viewCenter = CGPoint(x: viewBounds.midX, y: viewBounds.midY)
 
-        // PDF bottom-left in view coordinates (NSView uses Y+ = up)
-        let pdfBottomLeft = CGPoint(x: pageRect.minX, y: pageRect.minY)
-
-        // Offset from view center to PDF bottom-left
-        let offsetX = pdfBottomLeft.x - viewCenter.x
-        let offsetY = pdfBottomLeft.y - viewCenter.y
+        // Offset from view center to PDF origin (bottom-left)
+        let offsetX = pdfOriginInViewCoords.x - viewCenter.x
+        let offsetY = pdfOriginInViewCoords.y - viewCenter.y
 
         viewModel.pdfBottomLeftOffset = CGPoint(x: offsetX, y: offsetY)
     }
