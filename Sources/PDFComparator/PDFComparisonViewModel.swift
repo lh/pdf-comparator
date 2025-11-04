@@ -6,7 +6,10 @@ import UniformTypeIdentifiers
 class PDFComparisonViewModel: ObservableObject {
     @Published var basePDF: PDFDocument?
     @Published var overlayPDF: PDFDocument?
-    @Published var currentPage: Int = 0  // Current page index (0-based)
+    @Published var currentPage: Int = 0  // Current page index when coupled (0-based)
+    @Published var basePage: Int = 0  // Base PDF page when decoupled
+    @Published var overlayPage: Int = 0  // Overlay PDF page when decoupled
+    @Published var couplePages: Bool = true  // Default to coupled
 
     @Published var overlayOpacity: Double = 0.3
     @Published var overlayOffset: CGSize = .zero
@@ -90,19 +93,61 @@ class PDFComparisonViewModel: ObservableObject {
         max(basePDF?.pageCount ?? 0, overlayPDF?.pageCount ?? 0)
     }
 
+    var basePageCount: Int {
+        basePDF?.pageCount ?? 0
+    }
+
+    var overlayPageCount: Int {
+        overlayPDF?.pageCount ?? 0
+    }
+
     var pageDisplayString: String {
         guard totalPages > 0 else { return "No pages" }
         return "Page \(currentPage + 1) of \(totalPages)"
     }
 
+    var basePageDisplayString: String {
+        guard basePageCount > 0 else { return "No pages" }
+        return "Base: \(basePage + 1)/\(basePageCount)"
+    }
+
+    var overlayPageDisplayString: String {
+        guard overlayPageCount > 0 else { return "No pages" }
+        return "Overlay: \(overlayPage + 1)/\(overlayPageCount)"
+    }
+
     func nextPage() {
-        guard currentPage < totalPages - 1 else { return }
-        currentPage += 1
+        if couplePages {
+            guard currentPage < totalPages - 1 else { return }
+            currentPage += 1
+        }
     }
 
     func previousPage() {
-        guard currentPage > 0 else { return }
-        currentPage -= 1
+        if couplePages {
+            guard currentPage > 0 else { return }
+            currentPage -= 1
+        }
+    }
+
+    func nextBasePage() {
+        guard basePage < basePageCount - 1 else { return }
+        basePage += 1
+    }
+
+    func previousBasePage() {
+        guard basePage > 0 else { return }
+        basePage -= 1
+    }
+
+    func nextOverlayPage() {
+        guard overlayPage < overlayPageCount - 1 else { return }
+        overlayPage += 1
+    }
+
+    func previousOverlayPage() {
+        guard overlayPage > 0 else { return }
+        overlayPage -= 1
     }
 
     func loadBasePDF() {

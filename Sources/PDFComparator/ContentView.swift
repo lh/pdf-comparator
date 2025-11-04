@@ -28,21 +28,64 @@ struct ContentView: View {
 
                 // Page navigation
                 if viewModel.totalPages > 1 {
-                    Button(action: { viewModel.previousPage() }) {
-                        Image(systemName: "chevron.left")
-                    }
-                    .disabled(viewModel.currentPage == 0)
-                    .help("Previous page")
+                    if viewModel.couplePages {
+                        // Coupled mode - single navigator
+                        Button(action: { viewModel.previousPage() }) {
+                            Image(systemName: "chevron.left")
+                        }
+                        .disabled(viewModel.currentPage == 0)
+                        .help("Previous page")
 
-                    Text(viewModel.pageDisplayString)
-                        .font(.system(size: 11))
-                        .frame(minWidth: 80)
+                        Text(viewModel.pageDisplayString)
+                            .font(.system(size: 11))
+                            .frame(minWidth: 80)
 
-                    Button(action: { viewModel.nextPage() }) {
-                        Image(systemName: "chevron.right")
+                        Button(action: { viewModel.nextPage() }) {
+                            Image(systemName: "chevron.right")
+                        }
+                        .disabled(viewModel.currentPage >= viewModel.totalPages - 1)
+                        .help("Next page")
+                    } else {
+                        // Decoupled mode - separate navigators
+                        // Base PDF navigator
+                        Button(action: { viewModel.previousBasePage() }) {
+                            Image(systemName: "chevron.left")
+                        }
+                        .disabled(viewModel.basePage == 0)
+                        .help("Previous base page")
+
+                        Text(viewModel.basePageDisplayString)
+                            .font(.system(size: 10))
+                            .frame(minWidth: 70)
+
+                        Button(action: { viewModel.nextBasePage() }) {
+                            Image(systemName: "chevron.right")
+                        }
+                        .disabled(viewModel.basePage >= viewModel.basePageCount - 1)
+                        .help("Next base page")
+
+                        Divider()
+
+                        // Overlay PDF navigator
+                        Button(action: { viewModel.previousOverlayPage() }) {
+                            Image(systemName: "chevron.left")
+                        }
+                        .disabled(viewModel.overlayPage == 0)
+                        .help("Previous overlay page")
+
+                        Text(viewModel.overlayPageDisplayString)
+                            .font(.system(size: 10))
+                            .frame(minWidth: 70)
+
+                        Button(action: { viewModel.nextOverlayPage() }) {
+                            Image(systemName: "chevron.right")
+                        }
+                        .disabled(viewModel.overlayPage >= viewModel.overlayPageCount - 1)
+                        .help("Next overlay page")
                     }
-                    .disabled(viewModel.currentPage >= viewModel.totalPages - 1)
-                    .help("Next page")
+
+                    Toggle("Couple Pages", isOn: $viewModel.couplePages)
+                        .help("When enabled, both PDFs navigate together")
 
                     Spacer()
                 }

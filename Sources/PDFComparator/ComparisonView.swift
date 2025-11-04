@@ -8,7 +8,10 @@ struct ComparisonView: View {
         ZStack {
             // Base PDF layer
             if let basePDF = viewModel.basePDF {
-                PDFViewRepresentable(document: basePDF, currentPage: viewModel.currentPage)
+                PDFViewRepresentable(
+                    document: basePDF,
+                    currentPage: viewModel.couplePages ? viewModel.currentPage : viewModel.basePage
+                )
             } else {
                 Text("Load Base PDF")
                     .foregroundColor(.secondary)
@@ -17,7 +20,10 @@ struct ComparisonView: View {
             // Overlay PDF layer with transformations
             // Order: translate to origin, scale, rotate, flip, translate back + offset
             if let overlayPDF = viewModel.overlayPDF {
-                PDFViewRepresentable(document: overlayPDF, currentPage: viewModel.currentPage)
+                PDFViewRepresentable(
+                    document: overlayPDF,
+                    currentPage: viewModel.couplePages ? viewModel.currentPage : viewModel.overlayPage
+                )
                     .scaleEffect(
                         x: viewModel.overlayScale * (viewModel.overlayFlipHorizontal ? -1 : 1),
                         y: viewModel.overlayScale * (viewModel.overlayFlipVertical ? -1 : 1),
