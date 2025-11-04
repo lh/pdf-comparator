@@ -1,0 +1,48 @@
+# PDF Comparator
+
+A macOS application for comparing two PDF files side-by-side with overlay capabilities to understand transformation vectors between PDF versions.
+
+## Features
+
+- **Dual PDF Loading**: Load a base PDF and an overlay PDF
+- **Translucent Overlay**: Adjust opacity (0-100%) of the overlay PDF to see both documents simultaneously
+- **Interactive Ruler**: Toggle rulers with pixel measurements for precise alignment
+- **Nudging Controls**: Use arrow keys to adjust overlay position
+  - Arrow keys: Move 1 pixel at a time
+  - Shift + Arrow keys: Move 10 pixels at a time
+- **Scaling Controls**: Adjust overlay scale from 50% to 200% with presets
+- **Transformation Vector**: Real-time display of translation, scale, and opacity values
+- **Copy to Clipboard**: Export transformation parameters
+
+## Building
+
+```bash
+swift build
+```
+
+## Running
+
+```bash
+swift run
+```
+
+Or open the package in Xcode:
+
+```bash
+open Package.swift
+```
+
+## Usage
+
+1. Click "Load Base PDF" to load your reference PDF
+2. Click "Load Overlay PDF" to load the PDF you want to compare
+3. Adjust the overlay opacity slider to see both PDFs
+4. Use arrow keys to nudge the overlay into position
+5. Adjust scale if needed
+6. Toggle "Show Ruler" for precise measurements
+7. Copy the transformation vector to understand the differences
+
+## Requirements
+
+- macOS 13.0 or later
+- Xcode 15.0 or later (for building)
