@@ -27,7 +27,7 @@ struct PDFComparatorApp: App {
                 .keyboardShortcut("?", modifiers: .command)
 
                 Button("View on GitHub") {
-                    if let url = URL(string: "https://github.com/LH/pdf-comparator") {
+                    if let url = URL(string: "https://github.com/lh/pdf-comparator") {
                         NSWorkspace.shared.open(url)
                     }
                 }
@@ -53,7 +53,7 @@ struct PDFComparatorApp: App {
         Author: Luke Herbert
         License: MIT (Open Source)
 
-        GitHub: https://github.com/LH/pdf-comparator
+        GitHub: https://github.com/lh/pdf-comparator
         """
 
         let alert = NSAlert()
@@ -65,7 +65,7 @@ struct PDFComparatorApp: App {
 
         let response = alert.runModal()
         if response == .alertSecondButtonReturn {
-            if let url = URL(string: "https://github.com/LH/pdf-comparator") {
+            if let url = URL(string: "https://github.com/lh/pdf-comparator") {
                 NSWorkspace.shared.open(url)
             }
         }

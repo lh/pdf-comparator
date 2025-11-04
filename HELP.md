@@ -227,7 +227,7 @@ If your PDF needs rotation, this tool won't help directly. However:
 
 PDF Comparator is open source software!
 
-- **GitHub Repository**: https://github.com/LH/pdf-comparator
+- **GitHub Repository**: https://github.com/lh/pdf-comparator
 - **License**: MIT License (free to use, modify, and distribute)
 - **Contributions**: Welcome! Feel free to fork, improve, and submit pull requests
 
@@ -261,7 +261,7 @@ A: The tool will display them as-is. You'll need to account for page size differ
 
 Found a bug? Have a feature request?
 
-- **GitHub Issues**: https://github.com/LH/pdf-comparator/issues
+- **GitHub Issues**: https://github.com/lh/pdf-comparator/issues
 
 ---
 
