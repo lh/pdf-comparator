@@ -240,18 +240,32 @@ struct PDFViewRepresentable: NSViewRepresentable {
         let pageBounds = page.bounds(for: .mediaBox)
         let viewBounds = pdfView.bounds
 
-        // Convert PDF point (0, 0) to view coordinates
-        // Note: pageBounds.origin might not be (0,0), so use that as the PDF origin
-        let pdfOriginInPDFCoords = CGPoint(x: pageBounds.minX, y: pageBounds.minY)
-        let pdfOriginInViewCoords = pdfView.convert(pdfOriginInPDFCoords, from: page)
+        // Calculate the scale factor from PDF points to view pixels
+        // Convert two PDF points to view coords to determine scale
+        let pdfOrigin = CGPoint(x: pageBounds.minX, y: pageBounds.minY)
+        let pdfTopRight = CGPoint(x: pageBounds.maxX, y: pageBounds.maxY)
+
+        let viewOrigin = pdfView.convert(pdfOrigin, from: page)
+        let viewTopRight = pdfView.convert(pdfTopRight, from: page)
+
+        // Scale factor from view pixels to PDF points
+        let viewWidth = abs(viewTopRight.x - viewOrigin.x)
+        let viewHeight = abs(viewTopRight.y - viewOrigin.y)
+        let pdfWidth = pageBounds.width
+        let pdfHeight = pageBounds.height
+
+        let scaleX = pdfWidth / viewWidth
+        let scaleY = pdfHeight / viewHeight
 
         // View center
         let viewCenter = CGPoint(x: viewBounds.midX, y: viewBounds.midY)
 
-        // Offset from view center to PDF origin (bottom-left)
-        let offsetX = pdfOriginInViewCoords.x - viewCenter.x
-        let offsetY = pdfOriginInViewCoords.y - viewCenter.y
+        // Offset from view center to PDF origin (in view coordinates)
+        let viewOffsetX = viewOrigin.x - viewCenter.x
+        let viewOffsetY = viewOrigin.y - viewCenter.y
 
-        viewModel.pdfBottomLeftOffset = CGPoint(x: offsetX, y: offsetY)
+        // Store both the view offset and the scale factor
+        viewModel.pdfBottomLeftOffset = CGPoint(x: viewOffsetX, y: viewOffsetY)
+        viewModel.pdfScale = CGSize(width: scaleX, height: scaleY)
     }
 }

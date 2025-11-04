@@ -27,15 +27,21 @@ class PDFComparisonViewModel: ObservableObject {
     @Published var scaleOrigin: CGPoint = .zero  // Relative to view center
     @Published var dragScaleOrigin: Bool = false  // Toggle: drag crosshair vs drag overlay
     @Published var pdfBottomLeftOffset: CGPoint = .zero  // PDF bottom-left position from view center
+    @Published var pdfScale: CGSize = CGSize(width: 1, height: 1)  // Scale from view pixels to PDF points
 
     var scaleOriginCoordinates: String {
         // Convert from view-center coordinates to PDF bottom-left coordinates
-        // scaleOrigin is measured from view center
-        // pdfBottomLeftOffset is where PDF (0,0) is relative to view center
-        // So: PDF coords = scaleOrigin - pdfBottomLeftOffset
+        // scaleOrigin is measured from view center in view pixels
+        // pdfBottomLeftOffset is where PDF (0,0) is relative to view center in view pixels
+        // pdfScale converts from view pixels to PDF points
 
-        let pdfX = scaleOrigin.x - pdfBottomLeftOffset.x
-        let pdfY = scaleOrigin.y - pdfBottomLeftOffset.y
+        // First get position relative to PDF origin in view pixels
+        let viewPixelsX = scaleOrigin.x - pdfBottomLeftOffset.x
+        let viewPixelsY = scaleOrigin.y - pdfBottomLeftOffset.y
+
+        // Convert from view pixels to PDF points
+        let pdfX = viewPixelsX * pdfScale.width
+        let pdfY = viewPixelsY * pdfScale.height
 
         // Adjust based on coordinate system preference
         let xMultiplier: CGFloat = xAxisRight ? 1 : -1
