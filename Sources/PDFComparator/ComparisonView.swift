@@ -27,7 +27,8 @@ struct ComparisonView: View {
                     // Apply scale origin offset: move opposite direction before scale, then compensate
                     .offset(x: viewModel.scaleOrigin.x * (1 - viewModel.overlayScale),
                            y: viewModel.scaleOrigin.y * (1 - viewModel.overlayScale))
-                    .offset(viewModel.overlayOffset)
+                    // Convert from PDF coordinates (Y+ = up) to SwiftUI (Y+ = down)
+                    .offset(x: viewModel.overlayOffset.width, y: -viewModel.overlayOffset.height)
                     .opacity(viewModel.overlayOpacity)
             }
 
@@ -107,7 +108,8 @@ class KeyHandlerNSView: NSView {
         let dy = currentLocation.y - lastLocation.y
 
         // Update overlay position
-        viewModel?.nudge(dx: dx, dy: -dy)  // Flip Y for correct direction
+        // Store in PDF coordinates: Y increases upward (opposite of SwiftUI)
+        viewModel?.nudge(dx: dx, dy: dy)
 
         lastDragLocation = currentLocation
     }
