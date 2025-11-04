@@ -5,29 +5,29 @@ struct ControlPanelView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text("Controls")
+            Text("Overlay")
                 .font(.title2)
                 .bold()
 
             Divider()
 
             // Opacity control
-            VStack(alignment: .leading) {
-                Text("Overlay Opacity")
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Opacity")
                     .font(.headline)
                 HStack {
                     Slider(value: $viewModel.overlayOpacity, in: 0...1)
                     Text("\(Int(viewModel.overlayOpacity * 100))%")
-                        .frame(width: 45, alignment: .trailing)
+                        .frame(width: 40, alignment: .trailing)
                 }
             }
 
             Divider()
 
             // Scale control
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 6) {
                 HStack {
-                    Text("Overlay Scale")
+                    Text("Scale")
                         .font(.headline)
                     Spacer()
                     Toggle("Lock", isOn: $viewModel.lockScale)
@@ -35,44 +35,36 @@ struct ControlPanelView: View {
                         .controlSize(.mini)
                 }
 
-                // Coarse slider
                 HStack {
                     Slider(value: $viewModel.overlayScale, in: 0.5...2.0)
                         .disabled(viewModel.lockScale)
                     Text("\(String(format: "%.2f", viewModel.overlayScale))x")
-                        .frame(width: 55, alignment: .trailing)
+                        .frame(width: 50, alignment: .trailing)
                 }
 
-                // Fine controls with text field
-                HStack(spacing: 8) {
+                HStack(spacing: 6) {
                     Button("-0.01") {
                         viewModel.overlayScale = max(0.5, viewModel.overlayScale - 0.01)
                     }
-                    .frame(width: 50)
+                    .frame(width: 48)
                     .disabled(viewModel.lockScale)
 
-                    TextField("Scale", value: $viewModel.overlayScale, format: .number.precision(.fractionLength(3)))
+                    TextField("", value: $viewModel.overlayScale, format: .number.precision(.fractionLength(3)))
                         .textFieldStyle(.roundedBorder)
-                        .frame(width: 70)
+                        .frame(width: 60)
                         .disabled(viewModel.lockScale)
                         .onSubmit {
-                            // Clamp to valid range
                             viewModel.overlayScale = max(0.5, min(2.0, viewModel.overlayScale))
                         }
 
                     Button("+0.01") {
                         viewModel.overlayScale = min(2.0, viewModel.overlayScale + 0.01)
                     }
-                    .frame(width: 50)
+                    .frame(width: 48)
                     .disabled(viewModel.lockScale)
-
-                    Text("(±0.01)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
                 }
 
-                // Preset scale buttons
-                HStack {
+                HStack(spacing: 4) {
                     Button("50%") { viewModel.overlayScale = 0.5 }
                         .disabled(viewModel.lockScale)
                     Button("75%") { viewModel.overlayScale = 0.75 }
@@ -85,14 +77,15 @@ struct ControlPanelView: View {
                         .disabled(viewModel.lockScale)
                 }
                 .buttonStyle(.borderless)
+                .font(.system(size: 11))
             }
 
             Divider()
 
             // Rotation control
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 6) {
                 HStack {
-                    Text("Overlay Rotation")
+                    Text("Rotation")
                         .font(.headline)
                     Spacer()
                     Toggle("Lock", isOn: $viewModel.lockRotation)
@@ -100,32 +93,33 @@ struct ControlPanelView: View {
                         .controlSize(.mini)
                 }
 
-                // Fine controls with text field
-                HStack(spacing: 8) {
+                HStack(spacing: 6) {
                     Button("-1°") {
                         viewModel.overlayRotation -= 1.0
                     }
-                    .frame(width: 45)
+                    .frame(width: 42)
                     .disabled(viewModel.lockRotation)
 
-                    TextField("Rotation", value: $viewModel.overlayRotation, format: .number.precision(.fractionLength(2)))
+                    TextField("", value: $viewModel.overlayRotation, format: .number.precision(.fractionLength(2)))
                         .textFieldStyle(.roundedBorder)
-                        .frame(width: 70)
+                        .frame(width: 60)
                         .disabled(viewModel.lockRotation)
 
                     Button("+1°") {
                         viewModel.overlayRotation += 1.0
                     }
-                    .frame(width: 45)
+                    .frame(width: 42)
                     .disabled(viewModel.lockRotation)
 
-                    Text("(±1°)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    Button("-90°") { viewModel.overlayRotation -= 90 }
+                        .frame(width: 50)
+                        .disabled(viewModel.lockRotation)
+                    Button("+90°") { viewModel.overlayRotation += 90 }
+                        .frame(width: 50)
+                        .disabled(viewModel.lockRotation)
                 }
 
-                // Preset rotation buttons
-                HStack {
+                HStack(spacing: 4) {
                     Button("0°") { viewModel.overlayRotation = 0 }
                         .disabled(viewModel.lockRotation)
                     Button("90°") { viewModel.overlayRotation = 90 }
@@ -136,99 +130,75 @@ struct ControlPanelView: View {
                         .disabled(viewModel.lockRotation)
                 }
                 .buttonStyle(.borderless)
-
-                HStack {
-                    Button("-90°") { viewModel.overlayRotation -= 90 }
-                        .disabled(viewModel.lockRotation)
-                    Button("+90°") { viewModel.overlayRotation += 90 }
-                        .disabled(viewModel.lockRotation)
-                }
-                .buttonStyle(.borderless)
+                .font(.system(size: 11))
             }
 
             Divider()
 
             // Flip controls
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Overlay Flip")
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Flip")
                     .font(.headline)
 
-                HStack {
-                    Toggle("Flip Horizontal", isOn: $viewModel.overlayFlipHorizontal)
-                    Spacer()
-                }
-
-                HStack {
-                    Toggle("Flip Vertical", isOn: $viewModel.overlayFlipVertical)
+                HStack(spacing: 12) {
+                    Toggle("↔︎", isOn: $viewModel.overlayFlipHorizontal)
+                        .toggleStyle(.button)
+                        .help("Flip Horizontal")
+                    Toggle("↕︎", isOn: $viewModel.overlayFlipVertical)
+                        .toggleStyle(.button)
+                        .help("Flip Vertical")
                     Spacer()
                 }
             }
 
             Divider()
 
-            // Nudge controls
-            VStack(alignment: .leading) {
-                Text("Position Offset")
+            // Position controls
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Position")
                     .font(.headline)
 
-                Text("X: \(String(format: "%.1f", viewModel.overlayOffset.width)) pt")
-                Text("Y: \(String(format: "%.1f", viewModel.overlayOffset.height)) pt")
+                HStack(spacing: 8) {
+                    Text("X:")
+                        .frame(width: 16, alignment: .leading)
+                    Text("\(String(format: "%.1f", viewModel.overlayOffset.width)) pt")
+                        .frame(width: 70, alignment: .trailing)
+                        .font(.system(.body, design: .monospaced))
 
-                Text("Use arrow keys to nudge")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                Text("Hold Shift for 10pt steps")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                Text("(1 point = 1/72 inch)")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                HStack {
-                    Button("Reset Position") {
-                        viewModel.overlayOffset = .zero
-                    }
+                    Text("Y:")
+                        .frame(width: 16, alignment: .leading)
+                    Text("\(String(format: "%.1f", viewModel.overlayOffset.height)) pt")
+                        .frame(width: 70, alignment: .trailing)
+                        .font(.system(.body, design: .monospaced))
                 }
+
+                Text("Arrow keys to nudge (Shift for 10pt)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Button("Reset") {
+                    viewModel.overlayOffset = .zero
+                }
+                .buttonStyle(.borderless)
+                .font(.system(size: 11))
             }
 
             Divider()
 
-            // Coordinate system configuration
-            VStack(alignment: .leading, spacing: 8) {
+            // Coordinate system - simplified to radio button style
+            VStack(alignment: .leading, spacing: 6) {
                 Text("Coordinate System")
                     .font(.headline)
 
-                Text(viewModel.coordinateSystemName)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Text("Y-Axis:")
-                            .frame(width: 60, alignment: .leading)
-                        Picker("", selection: $viewModel.yAxisUp) {
-                            Text("Up = +").tag(true)
-                            Text("Up = −").tag(false)
-                        }
-                        .pickerStyle(.segmented)
-                        .frame(width: 140)
-                    }
-
-                    HStack {
-                        Text("X-Axis:")
-                            .frame(width: 60, alignment: .leading)
-                        Picker("", selection: $viewModel.xAxisRight) {
-                            Text("Right = +").tag(true)
-                            Text("Right = −").tag(false)
-                        }
-                        .pickerStyle(.segmented)
-                        .frame(width: 140)
-                    }
+                Picker("", selection: Binding(
+                    get: { viewModel.yAxisUp ? 0 : 1 },
+                    set: { viewModel.yAxisUp = ($0 == 0) }
+                )) {
+                    Text("PDF (+Right, +Up)").tag(0)
+                    Text("Screen (+Right, +Down)").tag(1)
                 }
-
-                Text("Default: Bottom-Left origin (PDF standard)")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                .pickerStyle(.radioGroup)
+                .labelsHidden()
             }
 
             Divider()

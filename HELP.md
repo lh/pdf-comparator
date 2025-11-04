@@ -43,8 +43,10 @@ The overlay PDF will appear semi-transparent on top of the base PDF.
 
 ### 2. Adjust the Overlay
 
+**Note**: All controls in the right panel affect only the **Overlay PDF**. The base PDF remains fixed and untransformed.
+
 #### Opacity (Transparency)
-- Use the **Overlay Opacity** slider to adjust transparency
+- Use the **Opacity** slider to adjust transparency
 - 30% is the default - you can see both PDFs clearly
 - 100% makes the overlay completely opaque
 - 0% makes it invisible
@@ -55,21 +57,41 @@ The overlay PDF will appear semi-transparent on top of the base PDF.
   - Type exact values in the text field (e.g., 1.234)
   - Use **-0.01** and **+0.01** buttons for precise adjustments
 - **Preset Buttons**: Jump to common values (50%, 75%, 100%, 125%, 150%)
+- **Lock Toggle**: Prevent accidental scale changes from gestures
 
-#### Position (Offset)
-- **Arrow Keys**: Move the overlay 1 pixel at a time
+#### Rotation
+- **Fine Controls**: Type exact angles or use **-1°** and **+1°** buttons
+- **Quick Rotate**: **-90°** and **+90°** buttons for major rotations
+- **Preset Buttons**: Jump to 0°, 90°, 180°, 270°
+- **Trackpad Gesture**: Two-finger rotate for natural control
+- **Lock Toggle**: Prevent accidental rotation changes
+
+#### Flip
+- **↔︎ button**: Flip horizontally (mirror left-right)
+- **↕︎ button**: Flip vertically (mirror top-bottom)
+- Useful for matching mirrored or inverted output
+
+#### Position
+- **Mouse/Trackpad**: Click and drag anywhere to move the overlay
+- **Arrow Keys**: Move the overlay 1 point at a time
   - ↑ Up
   - ↓ Down
   - ← Left
   - → Right
-- **Shift + Arrow Keys**: Move 10 pixels at a time for faster adjustments
+- **Shift + Arrow Keys**: Move 10 points at a time for faster adjustments
 
 **Tip**: Click anywhere in the comparison area first to ensure it has keyboard focus.
 
 #### Ruler
-- Toggle **Show Ruler** to display pixel measurements
+- Toggle **Show Ruler** to display point measurements (1 pt = 1/72 inch)
 - Helpful for precise alignment
 - Shows horizontal and vertical rulers with a center crosshair
+
+#### Scale Origin
+- Toggle **Scale Origin** to show a draggable green crosshair
+- Drag the crosshair to any feature you want to keep fixed
+- Scaling will happen around this point instead of the center
+- Useful for maintaining alignment of specific features while scaling
 
 ### 3. Read the Transformation Information
 
