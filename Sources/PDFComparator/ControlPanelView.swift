@@ -141,13 +141,16 @@ struct ControlPanelView: View {
                 Text("Position Offset")
                     .font(.headline)
 
-                Text("X: \(String(format: "%.1f", viewModel.overlayOffset.width)) px")
-                Text("Y: \(String(format: "%.1f", viewModel.overlayOffset.height)) px")
+                Text("X: \(String(format: "%.1f", viewModel.overlayOffset.width)) pt")
+                Text("Y: \(String(format: "%.1f", viewModel.overlayOffset.height)) pt")
 
                 Text("Use arrow keys to nudge")
                     .font(.caption)
                     .foregroundColor(.secondary)
-                Text("Hold Shift for 10px steps")
+                Text("Hold Shift for 10pt steps")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Text("(1 point = 1/72 inch)")
                     .font(.caption)
                     .foregroundColor(.secondary)
 

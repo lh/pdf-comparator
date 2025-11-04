@@ -17,16 +17,27 @@ class PDFComparisonViewModel: ObservableObject {
     @Published var showRuler: Bool = false
 
     // Transformation information for output (order: scale, rotate, flip, translate)
+    // Note: macOS uses points where 1 point = 1 pixel on non-retina, 2 pixels on retina
+    // For PDF work, points are the correct unit (1 point = 1/72 inch)
     var transformationVector: String {
         let flipH = overlayFlipHorizontal ? "Yes" : "No"
         let flipV = overlayFlipVertical ? "Yes" : "No"
+
+        // Get screen scale to provide both points and actual pixels
+        let screenScale = NSScreen.main?.backingScaleFactor ?? 1.0
+        let pixelX = overlayOffset.width * screenScale
+        let pixelY = overlayOffset.height * screenScale
+
         return """
         Scale: \(String(format: "%.3f", overlayScale))
         Rotation: \(String(format: "%.2f", overlayRotation))°
         Flip Horizontal: \(flipH)
         Flip Vertical: \(flipV)
-        Translation: (\(String(format: "%.2f", overlayOffset.width)), \(String(format: "%.2f", overlayOffset.height)))
+        Translation (Points): (\(String(format: "%.2f", overlayOffset.width)), \(String(format: "%.2f", overlayOffset.height)))
+        Translation (Pixels): (\(String(format: "%.0f", pixelX)), \(String(format: "%.0f", pixelY)))
         Opacity: \(String(format: "%.2f", overlayOpacity))
+
+        Note: Points are recommended for PDF manipulation (1 pt = 1/72 inch)
         """
     }
 

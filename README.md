@@ -16,10 +16,10 @@ PDF Comparator helps you adjust the output of a PDF rendering program to match a
 
 - **Dual PDF Loading**: Load a base PDF and an overlay PDF
 - **Translucent Overlay**: Adjust opacity (0-100%) of the overlay PDF to see both documents simultaneously
-- **Interactive Ruler**: Toggle rulers with pixel measurements for precise alignment
+- **Interactive Ruler**: Toggle rulers with point measurements for precise alignment (1 pt = 1/72 inch, standard PDF unit)
 - **Nudging Controls**: Use arrow keys to adjust overlay position
-  - Arrow keys: Move 1 pixel at a time
-  - Shift + Arrow keys: Move 10 pixels at a time
+  - Arrow keys: Move 1 point at a time
+  - Shift + Arrow keys: Move 10 points at a time
 - **Scaling Controls**: Adjust overlay scale from 50% to 200%
   - Coarse slider for quick adjustments
   - Fine controls with ±0.01 increment buttons
@@ -71,11 +71,29 @@ Then press Cmd+R to run. The app should automatically activate and come to the f
    - **Scale**: Match sizes (use fine controls for ±0.01 precision)
    - **Rotation**: Align orientation (±1° or 90° increments)
    - **Flip**: Mirror if needed (horizontal/vertical toggles)
-   - **Position**: Use arrow keys to nudge into place (1px or 10px with Shift)
-5. Toggle "Show Ruler" for pixel-perfect measurements (shows pixels)
+   - **Position**: Use arrow keys to nudge into place (1pt or 10pt with Shift)
+5. Toggle "Show Ruler" for precise measurements (shows **points** - 1 pt = 1/72 inch)
 6. Copy the transformation information to adjust your code
 
 **See [HELP.md](HELP.md) for detailed workflow examples.**
+
+## Understanding Points vs Pixels
+
+**PDF Comparator uses POINTS, not pixels.**
+
+- **1 point (pt) = 1/72 inch** - This is the standard PDF unit
+- On non-Retina displays: 1 point = 1 pixel
+- On Retina displays: 1 point = 2 pixels (or more)
+
+**Why points are better for PDF work:**
+- PDFs are resolution-independent
+- All PDF libraries expect point coordinates
+- Consistent across different displays
+- Standard unit in PDF specifications
+
+**The transformation output provides both:**
+- Translation in **points** (use this for PDF manipulation)
+- Translation in pixels (for reference/debugging)
 
 ## Requirements
 
