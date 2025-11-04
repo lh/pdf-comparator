@@ -185,6 +185,26 @@ struct ControlPanelView: View {
 
             Divider()
 
+            // Crosshair coordinates (when scale origin is visible)
+            if viewModel.showScaleOrigin {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Crosshair Position")
+                        .font(.headline)
+
+                    HStack {
+                        Text(viewModel.scaleOriginCoordinates)
+                            .font(.system(.body, design: .monospaced))
+                            .foregroundColor(.blue)
+                    }
+
+                    Text("Relative to PDF center")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                Divider()
+            }
+
             // Coordinate system - simplified to radio button style
             VStack(alignment: .leading, spacing: 6) {
                 Text("Coordinate System")

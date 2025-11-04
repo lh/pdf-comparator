@@ -27,6 +27,17 @@ class PDFComparisonViewModel: ObservableObject {
     @Published var scaleOrigin: CGPoint = .zero  // Relative to view center
     @Published var dragScaleOrigin: Bool = false  // Toggle: drag crosshair vs drag overlay
 
+    var scaleOriginCoordinates: String {
+        // Adjust based on coordinate system
+        let xMultiplier: CGFloat = xAxisRight ? 1 : -1
+        let yMultiplier: CGFloat = yAxisUp ? 1 : -1
+
+        let adjustedX = scaleOrigin.x * xMultiplier
+        let adjustedY = scaleOrigin.y * yMultiplier
+
+        return "(\(String(format: "%.1f", adjustedX)), \(String(format: "%.1f", adjustedY))) pt"
+    }
+
     // Coordinate system configuration
     // Default: Bottom-Left origin (PostScript/PDF standard)
     // Up = positive Y, Right = positive X
