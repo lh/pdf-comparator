@@ -95,21 +95,9 @@ class KeyHandlerNSView: NSView {
         // Grab focus on mouse click
         window?.makeFirstResponder(self)
 
-        // Check if clicking near scale origin crosshair
-        if let viewModel = viewModel, viewModel.showScaleOrigin {
-            let clickPoint = convert(event.locationInWindow, from: nil)
-            let center = CGPoint(x: bounds.midX, y: bounds.midY)
-            let crosshairPos = CGPoint(
-                x: center.x + viewModel.scaleOrigin.x,
-                y: center.y - viewModel.scaleOrigin.y  // Flip Y for view coordinates
-            )
-
-            let distance = hypot(clickPoint.x - crosshairPos.x, clickPoint.y - crosshairPos.y)
-
-            // If within 40pt of crosshair, don't start overlay dragging
-            if distance < 40 {
-                return
-            }
+        // If drag crosshair mode is enabled, don't drag overlay
+        if let viewModel = viewModel, viewModel.dragScaleOrigin && viewModel.showScaleOrigin {
+            return
         }
 
         // Start dragging overlay

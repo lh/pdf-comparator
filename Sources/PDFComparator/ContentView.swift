@@ -29,6 +29,11 @@ struct ContentView: View {
                 Toggle("Show Ruler", isOn: $viewModel.showRuler)
 
                 Toggle("Scale Origin", isOn: $viewModel.showScaleOrigin)
+
+                if viewModel.showScaleOrigin {
+                    Toggle("Drag Crosshair", isOn: $viewModel.dragScaleOrigin)
+                        .help("When enabled, dragging moves the crosshair instead of the overlay")
+                }
             }
         }
         .alert("PDF Changed", isPresented: $viewModel.showReloadAlert) {

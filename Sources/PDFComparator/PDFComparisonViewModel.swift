@@ -21,6 +21,7 @@ class PDFComparisonViewModel: ObservableObject {
     // Scale origin point (center of scaling)
     @Published var showScaleOrigin: Bool = false
     @Published var scaleOrigin: CGPoint = .zero  // Relative to view center
+    @Published var dragScaleOrigin: Bool = false  // Toggle: drag crosshair vs drag overlay
 
     // Coordinate system configuration
     // Default: Bottom-Left origin (PostScript/PDF standard)

@@ -42,9 +42,11 @@ class ScaleOriginNSView: NSView {
         )
 
         // Draw crosshair with center gap
-        NSColor.green.withAlphaComponent(0.8).setStroke()
+        // Use brighter color when in drag mode
+        let color = viewModel.dragScaleOrigin ? NSColor.green : NSColor.green.withAlphaComponent(0.8)
+        color.setStroke()
         let path = NSBezierPath()
-        path.lineWidth = 1.0
+        path.lineWidth = viewModel.dragScaleOrigin ? 1.5 : 1.0
 
         let size: CGFloat = 30
         let gap: CGFloat = 6
@@ -67,20 +69,11 @@ class ScaleOriginNSView: NSView {
     override func mouseDown(with event: NSEvent) {
         guard let viewModel = viewModel else { return }
 
-        let clickPoint = convert(event.locationInWindow, from: nil)
-        let center = CGPoint(x: bounds.midX, y: bounds.midY)
-        let crosshairPos = CGPoint(
-            x: center.x + viewModel.scaleOrigin.x,
-            y: center.y - viewModel.scaleOrigin.y
-        )
+        // Only allow dragging if drag mode is enabled
+        guard viewModel.dragScaleOrigin else { return }
 
-        let distance = hypot(clickPoint.x - crosshairPos.x, clickPoint.y - crosshairPos.y)
-
-        // Only start dragging if clicking within 40pt of crosshair
-        if distance < 40 {
-            isDragging = true
-            showLabel()
-        }
+        isDragging = true
+        showLabel()
     }
 
     override func mouseDragged(with event: NSEvent) {
