@@ -84,8 +84,8 @@ struct ContentView: View {
                         .help("Next overlay page")
                     }
 
-                    Toggle("Couple Pages", isOn: $viewModel.couplePages)
-                        .help("When enabled, both PDFs navigate together")
+                    Toggle(viewModel.couplePages ? "Decouple Pages" : "Couple Pages", isOn: $viewModel.couplePages)
+                        .help(viewModel.couplePages ? "Click to navigate pages independently" : "Click to navigate pages together")
 
                     Spacer()
                 }
