@@ -18,6 +18,21 @@ class PDFComparisonViewModel: ObservableObject {
     @Published var lockScale: Bool = false
     @Published var lockRotation: Bool = false
 
+    // Coordinate system configuration
+    // Default: Bottom-Left origin (PostScript/PDF standard)
+    // Up = positive Y, Right = positive X
+    @Published var yAxisUp: Bool = true      // true = up is positive, false = up is negative
+    @Published var xAxisRight: Bool = true   // true = right is positive, false = right is negative
+
+    var coordinateSystemName: String {
+        switch (xAxisRight, yAxisUp) {
+        case (true, true):   return "Bottom-Left (PDF Standard)"
+        case (true, false):  return "Top-Left (Screen/Image)"
+        case (false, true):  return "Bottom-Right"
+        case (false, false): return "Top-Right"
+        }
+    }
+
     // Transformation information for output (order: scale, rotate, flip, translate)
     // Note: macOS uses points where 1 point = 1 pixel on non-retina, 2 pixels on retina
     // For PDF work, points are the correct unit (1 point = 1/72 inch)
@@ -25,21 +40,30 @@ class PDFComparisonViewModel: ObservableObject {
         let flipH = overlayFlipHorizontal ? "Yes" : "No"
         let flipV = overlayFlipVertical ? "Yes" : "No"
 
+        // Adjust translation based on coordinate system
+        let xMultiplier: CGFloat = xAxisRight ? 1 : -1
+        let yMultiplier: CGFloat = yAxisUp ? 1 : -1
+
+        let adjustedX = overlayOffset.width * xMultiplier
+        let adjustedY = overlayOffset.height * yMultiplier
+
         // Get screen scale to provide both points and actual pixels
         let screenScale = NSScreen.main?.backingScaleFactor ?? 1.0
-        let pixelX = overlayOffset.width * screenScale
-        let pixelY = overlayOffset.height * screenScale
+        let pixelX = adjustedX * screenScale
+        let pixelY = adjustedY * screenScale
 
         return """
+        Coordinate System: \(coordinateSystemName)
         Scale: \(String(format: "%.3f", overlayScale))
         Rotation: \(String(format: "%.2f", overlayRotation))°
         Flip Horizontal: \(flipH)
         Flip Vertical: \(flipV)
-        Translation (Points): (\(String(format: "%.2f", overlayOffset.width)), \(String(format: "%.2f", overlayOffset.height)))
+        Translation (Points): (\(String(format: "%.2f", adjustedX)), \(String(format: "%.2f", adjustedY)))
         Translation (Pixels): (\(String(format: "%.0f", pixelX)), \(String(format: "%.0f", pixelY)))
         Opacity: \(String(format: "%.2f", overlayOpacity))
 
-        Note: Points are recommended for PDF manipulation (1 pt = 1/72 inch)
+        Note: Translation adjusted for coordinate system
+        Points are recommended for PDF manipulation (1 pt = 1/72 inch)
         """
     }
 

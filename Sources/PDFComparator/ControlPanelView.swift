@@ -193,6 +193,46 @@ struct ControlPanelView: View {
 
             Divider()
 
+            // Coordinate system configuration
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Coordinate System")
+                    .font(.headline)
+
+                Text(viewModel.coordinateSystemName)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Text("Y-Axis:")
+                            .frame(width: 60, alignment: .leading)
+                        Picker("", selection: $viewModel.yAxisUp) {
+                            Text("Up = +").tag(true)
+                            Text("Up = −").tag(false)
+                        }
+                        .pickerStyle(.segmented)
+                        .frame(width: 140)
+                    }
+
+                    HStack {
+                        Text("X-Axis:")
+                            .frame(width: 60, alignment: .leading)
+                        Picker("", selection: $viewModel.xAxisRight) {
+                            Text("Right = +").tag(true)
+                            Text("Right = −").tag(false)
+                        }
+                        .pickerStyle(.segmented)
+                        .frame(width: 140)
+                    }
+                }
+
+                Text("Default: Bottom-Left origin (PDF standard)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            Divider()
+
             // Transformation information output
             VStack(alignment: .leading) {
                 Text("Transformation Information")

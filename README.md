@@ -39,6 +39,11 @@ PDF Comparator helps you adjust the output of a PDF rendering program to match a
 - **Flip Controls**: Mirror the overlay
   - Flip Horizontal toggle
   - Flip Vertical toggle
+- **Coordinate System Configuration**: Match your PDF library's coordinate system
+  - **Y-Axis**: Up = + (default) or Up = −
+  - **X-Axis**: Right = + (default) or Right = −
+  - **Presets**: Bottom-Left (PDF), Top-Left (Screen), Bottom-Right, Top-Right
+  - Translation values automatically adjusted for selected system
 - **Transformation Information**: Real-time display of scale, rotation, flip, translation, and opacity values
 - **Copy to Clipboard**: Export transformation parameters
 
@@ -108,6 +113,42 @@ Then press Cmd+R to run. The app should automatically activate and come to the f
 - **Click anywhere**: Focus the window for keyboard shortcuts
 - **Opacity slider**: Adjust transparency
 - **Toggle buttons**: Flip horizontal/vertical, show ruler, lock scale/rotation
+
+## Coordinate Systems Explained
+
+Different PDF libraries use different coordinate systems. PDF Comparator lets you choose:
+
+### Bottom-Left Origin (Default - PDF Standard)
+```
+  Y↑
+   |
+   |
+   └──→ X
+(0,0)
+```
+- **Y-Axis**: Up = +, Down = −
+- **X-Axis**: Right = +, Left = −
+- **Used by**: PostScript, PDF spec, most PDF libraries
+- **Example**: ReportLab, PyPDF2, PDFKit
+
+### Top-Left Origin (Screen/Image)
+```
+(0,0)
+   ┌──→ X
+   |
+   ↓
+   Y
+```
+- **Y-Axis**: Up = −, Down = +
+- **X-Axis**: Right = +, Left = −
+- **Used by**: Most image formats, screen coordinates
+- **Example**: HTML Canvas, some graphics libraries
+
+### How to Choose:
+1. Check your PDF library's documentation
+2. Try bottom-left first (most common for PDF)
+3. If translations seem inverted, switch Y-axis setting
+4. The transformation output will be correct for your chosen system
 
 ## Understanding Points vs Pixels
 
