@@ -194,6 +194,7 @@ struct PDFViewRepresentable: NSViewRepresentable {
     let document: PDFDocument
     let currentPage: Int
     @ObservedObject var viewModel: PDFComparisonViewModel
+    let isBaseDocument: Bool = false  // Only base PDF should calculate offset
 
     func makeNSView(context: Context) -> PDFView {
         let pdfView = PDFView()
@@ -214,7 +215,10 @@ struct PDFViewRepresentable: NSViewRepresentable {
         if let currentPDFPage = pdfView.currentPage {
             let index = document.index(for: currentPDFPage)
             if index == currentPage {
-                // Already on the correct page, don't navigate
+                // Calculate offset even when not navigating (window might have resized)
+                DispatchQueue.main.async {
+                    self.calculatePDFOffset(pdfView: pdfView)
+                }
                 return
             }
         }
@@ -224,8 +228,9 @@ struct PDFViewRepresentable: NSViewRepresentable {
         }
 
         // Calculate PDF bottom-left position from view center
-        DispatchQueue.main.async {
-            calculatePDFOffset(pdfView: pdfView)
+        // Delay slightly to allow PDFView to finish layout after page change
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.calculatePDFOffset(pdfView: pdfView)
         }
     }
 
