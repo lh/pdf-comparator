@@ -7,7 +7,7 @@ class PDFComparisonViewModel: ObservableObject {
     @Published var basePDF: PDFDocument?
     @Published var overlayPDF: PDFDocument?
 
-    @Published var overlayOpacity: Double = 0.5
+    @Published var overlayOpacity: Double = 0.3
     @Published var overlayOffset: CGSize = .zero
     @Published var overlayScale: Double = 1.0
 
@@ -58,6 +58,6 @@ class PDFComparisonViewModel: ObservableObject {
     func resetTransformation() {
         overlayOffset = .zero
         overlayScale = 1.0
-        overlayOpacity = 0.5
+        overlayOpacity = 0.3
     }
 }

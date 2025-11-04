@@ -29,12 +29,24 @@ struct ComparisonView: View {
             if viewModel.showRuler {
                 RulerOverlay()
             }
+
+            // Invisible overlay to capture clicks and ensure focus
+            Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    isFocused = true
+                }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(NSColor.windowBackgroundColor))
         .focusable()
         .focused($isFocused)
+        .focusEffectDisabled()
         .onAppear {
-            isFocused = true
+            // Delay to ensure window is ready
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                isFocused = true
+            }
         }
         .onKeyPress(keys: [.upArrow, .downArrow, .leftArrow, .rightArrow]) { press in
             let nudgeAmount: CGFloat = press.modifiers.contains(.shift) ? 10 : 1
