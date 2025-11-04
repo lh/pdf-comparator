@@ -22,15 +22,23 @@ swift build
 
 ## Running
 
+### From Terminal (Recommended)
+
 ```bash
 swift run
 ```
 
-Or open the package in Xcode:
+This is the most reliable way to run the app.
+
+### From Xcode
 
 ```bash
 open Package.swift
 ```
+
+Then press Cmd+R to run. The app should automatically activate and come to the foreground.
+
+**Note**: If running from Xcode, make sure to click in the app window to give it focus before using arrow keys.
 
 ## Usage
 

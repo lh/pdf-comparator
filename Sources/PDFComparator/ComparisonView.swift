@@ -3,14 +3,12 @@ import PDFKit
 
 struct ComparisonView: View {
     @ObservedObject var viewModel: PDFComparisonViewModel
-    @FocusState private var isFocused: Bool
 
     var body: some View {
         ZStack {
             // Base PDF layer
             if let basePDF = viewModel.basePDF {
                 PDFViewRepresentable(document: basePDF)
-                    .allowsHitTesting(false)
             } else {
                 Text("Load Base PDF")
                     .foregroundColor(.secondary)
@@ -22,7 +20,6 @@ struct ComparisonView: View {
                     .opacity(viewModel.overlayOpacity)
                     .scaleEffect(viewModel.overlayScale)
                     .offset(viewModel.overlayOffset)
-                    .allowsHitTesting(false)
             }
 
             // Ruler overlay
@@ -30,42 +27,80 @@ struct ComparisonView: View {
                 RulerOverlay()
             }
 
-            // Invisible overlay to capture clicks and ensure focus
-            Color.clear
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    isFocused = true
-                }
+            // Key handler overlay
+            KeyHandlerView(viewModel: viewModel)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(NSColor.windowBackgroundColor))
-        .focusable()
-        .focused($isFocused)
-        .focusEffectDisabled()
-        .onAppear {
-            // Delay to ensure window is ready
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                isFocused = true
-            }
-        }
-        .onKeyPress(keys: [.upArrow, .downArrow, .leftArrow, .rightArrow]) { press in
-            let nudgeAmount: CGFloat = press.modifiers.contains(.shift) ? 10 : 1
+    }
+}
 
-            switch press.key {
-            case .upArrow:
-                viewModel.nudge(dx: 0, dy: -nudgeAmount)
-            case .downArrow:
-                viewModel.nudge(dx: 0, dy: nudgeAmount)
-            case .leftArrow:
-                viewModel.nudge(dx: -nudgeAmount, dy: 0)
-            case .rightArrow:
-                viewModel.nudge(dx: nudgeAmount, dy: 0)
-            default:
-                return .ignored
-            }
+// Custom view that uses NSViewRepresentable to capture keyboard events properly
+struct KeyHandlerView: NSViewRepresentable {
+    @ObservedObject var viewModel: PDFComparisonViewModel
 
-            return .handled
+    func makeNSView(context: Context) -> KeyHandlerNSView {
+        let view = KeyHandlerNSView()
+        view.viewModel = viewModel
+        return view
+    }
+
+    func updateNSView(_ nsView: KeyHandlerNSView, context: Context) {
+        nsView.viewModel = viewModel
+    }
+}
+
+class KeyHandlerNSView: NSView {
+    var viewModel: PDFComparisonViewModel?
+
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        // Make the view transparent but still receive events
+        wantsLayer = true
+        layer?.backgroundColor = NSColor.clear.cgColor
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override var acceptsFirstResponder: Bool { true }
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        // Automatically grab focus when added to window
+        DispatchQueue.main.async {
+            self.window?.makeFirstResponder(self)
         }
+    }
+
+    override func mouseDown(with event: NSEvent) {
+        // Grab focus on mouse click
+        window?.makeFirstResponder(self)
+        super.mouseDown(with: event)
+    }
+
+    override func keyDown(with event: NSEvent) {
+        let nudgeAmount: CGFloat = event.modifierFlags.contains(.shift) ? 10 : 1
+
+        switch Int(event.keyCode) {
+        case 126: // Up arrow
+            viewModel?.nudge(dx: 0, dy: -nudgeAmount)
+        case 125: // Down arrow
+            viewModel?.nudge(dx: 0, dy: nudgeAmount)
+        case 123: // Left arrow
+            viewModel?.nudge(dx: -nudgeAmount, dy: 0)
+        case 124: // Right arrow
+            viewModel?.nudge(dx: nudgeAmount, dy: 0)
+        default:
+            super.keyDown(with: event)
+        }
+    }
+
+    // Allow the view to be hit-tested
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        // Return self to capture all mouse events in our bounds
+        return bounds.contains(point) ? self : nil
     }
 }
 
