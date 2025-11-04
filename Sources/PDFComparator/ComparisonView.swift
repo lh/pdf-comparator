@@ -10,7 +10,8 @@ struct ComparisonView: View {
             if let basePDF = viewModel.basePDF {
                 PDFViewRepresentable(
                     document: basePDF,
-                    currentPage: viewModel.couplePages ? viewModel.currentPage : viewModel.basePage
+                    currentPage: viewModel.couplePages ? viewModel.currentPage : viewModel.basePage,
+                    viewModel: viewModel
                 )
             } else {
                 Text("Load Base PDF")
@@ -22,7 +23,8 @@ struct ComparisonView: View {
             if let overlayPDF = viewModel.overlayPDF {
                 PDFViewRepresentable(
                     document: overlayPDF,
-                    currentPage: viewModel.couplePages ? viewModel.currentPage : viewModel.overlayPage
+                    currentPage: viewModel.couplePages ? viewModel.currentPage : viewModel.overlayPage,
+                    viewModel: viewModel
                 )
                     .scaleEffect(
                         x: viewModel.overlayScale * (viewModel.overlayFlipHorizontal ? -1 : 1),
@@ -191,6 +193,7 @@ class KeyHandlerNSView: NSView {
 struct PDFViewRepresentable: NSViewRepresentable {
     let document: PDFDocument
     let currentPage: Int
+    @ObservedObject var viewModel: PDFComparisonViewModel
 
     func makeNSView(context: Context) -> PDFView {
         let pdfView = PDFView()
@@ -219,5 +222,32 @@ struct PDFViewRepresentable: NSViewRepresentable {
         if let page = document.page(at: currentPage) {
             pdfView.go(to: page)
         }
+
+        // Calculate PDF bottom-left position from view center
+        DispatchQueue.main.async {
+            calculatePDFOffset(pdfView: pdfView)
+        }
+    }
+
+    private func calculatePDFOffset(pdfView: PDFView) {
+        guard let page = pdfView.currentPage else { return }
+
+        let pageBounds = page.bounds(for: .mediaBox)
+        let viewBounds = pdfView.bounds
+
+        // Get the page's bounds in view coordinates
+        let pageRect = pdfView.convert(pageBounds, from: page)
+
+        // View center
+        let viewCenter = CGPoint(x: viewBounds.midX, y: viewBounds.midY)
+
+        // PDF bottom-left in view coordinates (NSView uses Y+ = up)
+        let pdfBottomLeft = CGPoint(x: pageRect.minX, y: pageRect.minY)
+
+        // Offset from view center to PDF bottom-left
+        let offsetX = pdfBottomLeft.x - viewCenter.x
+        let offsetY = pdfBottomLeft.y - viewCenter.y
+
+        viewModel.pdfBottomLeftOffset = CGPoint(x: offsetX, y: offsetY)
     }
 }

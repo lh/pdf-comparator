@@ -26,32 +26,23 @@ class PDFComparisonViewModel: ObservableObject {
     @Published var showScaleOrigin: Bool = false
     @Published var scaleOrigin: CGPoint = .zero  // Relative to view center
     @Published var dragScaleOrigin: Bool = false  // Toggle: drag crosshair vs drag overlay
+    @Published var pdfBottomLeftOffset: CGPoint = .zero  // PDF bottom-left position from view center
 
     var scaleOriginCoordinates: String {
-        // Convert from center-relative to bottom-left (0,0) origin
-        // Get PDF page bounds
-        guard let pdf = basePDF ?? overlayPDF,
-              let page = pdf.page(at: couplePages ? currentPage : basePage) else {
-            return "(0.0, 0.0) pt"
-        }
+        // Convert from view-center coordinates to PDF bottom-left coordinates
+        // scaleOrigin is measured from view center
+        // pdfBottomLeftOffset is where PDF (0,0) is relative to view center
+        // So: PDF coords = scaleOrigin - pdfBottomLeftOffset
 
-        let pageBounds = page.bounds(for: .mediaBox)
-        let pageWidth = pageBounds.width
-        let pageHeight = pageBounds.height
+        let pdfX = scaleOrigin.x - pdfBottomLeftOffset.x
+        let pdfY = scaleOrigin.y - pdfBottomLeftOffset.y
 
-        // Convert from center-relative to bottom-left origin
-        // scaleOrigin.y is NEGATIVE when visually at top (stored as PDF Y+ up from center)
-        // Visual top = PDF pageHeight, visual bottom = PDF 0
-        // When scaleOrigin.y is negative (visual top), we want high PDF Y value
-        let xFromBottomLeft = (pageWidth / 2) + scaleOrigin.x
-        let yFromBottomLeft = (pageHeight / 2) + scaleOrigin.y
-
-        // Adjust based on coordinate system
+        // Adjust based on coordinate system preference
         let xMultiplier: CGFloat = xAxisRight ? 1 : -1
         let yMultiplier: CGFloat = yAxisUp ? 1 : -1
 
-        let adjustedX = xFromBottomLeft * xMultiplier
-        let adjustedY = yFromBottomLeft * yMultiplier
+        let adjustedX = pdfX * xMultiplier
+        let adjustedY = pdfY * yMultiplier
 
         return "(\(String(format: "%.1f", adjustedX)), \(String(format: "%.1f", adjustedY))) pt"
     }
