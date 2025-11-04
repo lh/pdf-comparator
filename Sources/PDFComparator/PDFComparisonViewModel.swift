@@ -28,12 +28,28 @@ class PDFComparisonViewModel: ObservableObject {
     @Published var dragScaleOrigin: Bool = false  // Toggle: drag crosshair vs drag overlay
 
     var scaleOriginCoordinates: String {
+        // Convert from center-relative to bottom-left (0,0) origin
+        // Get PDF page bounds
+        guard let pdf = basePDF ?? overlayPDF,
+              let page = pdf.page(at: couplePages ? currentPage : basePage) else {
+            return "(0.0, 0.0) pt"
+        }
+
+        let pageBounds = page.bounds(for: .mediaBox)
+        let pageWidth = pageBounds.width
+        let pageHeight = pageBounds.height
+
+        // Convert from center-relative to bottom-left origin
+        // scaleOrigin is relative to view center, need to add half page size
+        let xFromBottomLeft = (pageWidth / 2) + scaleOrigin.x
+        let yFromBottomLeft = (pageHeight / 2) + scaleOrigin.y
+
         // Adjust based on coordinate system
         let xMultiplier: CGFloat = xAxisRight ? 1 : -1
         let yMultiplier: CGFloat = yAxisUp ? 1 : -1
 
-        let adjustedX = scaleOrigin.x * xMultiplier
-        let adjustedY = scaleOrigin.y * yMultiplier
+        let adjustedX = xFromBottomLeft * xMultiplier
+        let adjustedY = yFromBottomLeft * yMultiplier
 
         return "(\(String(format: "%.1f", adjustedX)), \(String(format: "%.1f", adjustedY))) pt"
     }

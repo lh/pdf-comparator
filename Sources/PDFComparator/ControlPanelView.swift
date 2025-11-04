@@ -195,9 +195,18 @@ struct ControlPanelView: View {
                         Text(viewModel.scaleOriginCoordinates)
                             .font(.system(.body, design: .monospaced))
                             .foregroundColor(.blue)
+
+                        Spacer()
+
+                        Button("Copy") {
+                            NSPasteboard.general.clearContents()
+                            NSPasteboard.general.setString(viewModel.scaleOriginCoordinates, forType: .string)
+                        }
+                        .buttonStyle(.borderless)
+                        .font(.system(size: 11))
                     }
 
-                    Text("Relative to PDF center")
+                    Text("From bottom-left (0, 0)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

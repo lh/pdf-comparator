@@ -88,10 +88,31 @@ The overlay PDF will appear semi-transparent on top of the base PDF.
 - Shows horizontal and vertical rulers with a center crosshair
 
 #### Scale Origin
-- Toggle **Scale Origin** to show a draggable green crosshair
-- Drag the crosshair to any feature you want to keep fixed
+- Toggle **Scale Origin** to show a green crosshair
+- Toggle **Move Crosshair** to enable dragging mode
+  - When enabled: crosshair turns **dark blue** and you can drag it or use arrow keys
+  - When disabled: crosshair is light green and normal dragging moves the overlay
+- **Drag the crosshair** (in move mode): Click and drag anywhere, or use arrow keys
+- **Crosshair Position** display shows exact coordinates relative to PDF center
 - Scaling will happen around this point instead of the center
-- Useful for maintaining alignment of specific features while scaling
+- Useful for identifying precise locations and maintaining alignment while scaling
+
+#### Multi-Page Navigation
+- For PDFs with multiple pages, use the **page navigation controls** in the toolbar
+- **Coupled Mode** (default): Both PDFs navigate together
+  - ◀ **Page 2 of 10** ▶
+  - Click "**Decouple Pages**" to navigate independently
+- **Decoupled Mode**: Each PDF can be on different pages
+  - ◀ **Base: 2/10** ▶ | ◀ **Overlay: 4/10** ▶
+  - Useful when comparing non-corresponding pages
+  - Click "**Couple Pages**" to link them again
+
+#### Auto-Reload on File Change
+- When you modify and save a PDF file (e.g., regenerating your output), the app detects the change
+- An alert appears: "**PDF Changed**"
+- Click "**Reload**" to refresh - transformations automatically reset to give you a clean slate
+- Click "**Ignore**" to keep the current version
+- Perfect for iterative development workflow
 
 ### 3. Read the Transformation Information
 

@@ -16,6 +16,9 @@ let package = Package(
         .executableTarget(
             name: "PDFComparator",
             path: "Sources",
+            resources: [
+                .copy("../HELP.md")
+            ],
             swiftSettings: [
                 .unsafeFlags(["-parse-as-library"])
             ]
