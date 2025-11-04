@@ -185,7 +185,7 @@ Different PDF libraries use different coordinate systems. PDF Comparator lets yo
 ## Documentation
 
 - **[HELP.md](HELP.md)** - Complete user guide with workflow examples
-- **[APP_STORE_GUIDE.md](APP_STORE_GUIDE.md)** - How to submit to Mac App Store
+
 
 ## Open Source
 
@@ -195,7 +195,6 @@ This project is open source under the MIT License. You are free to:
 - Include it in commercial products
 - Fork and improve it
 
-**Sharing on App Store**: Yes, you can absolutely share the source code on GitHub and still sell or distribute the app on the Mac App Store! Apple has no restrictions on open-source apps. Many popular Mac App Store apps are open source.
 
 ### Contributing
 
