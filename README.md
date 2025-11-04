@@ -25,7 +25,15 @@ PDF Comparator helps you adjust the output of a PDF rendering program to match a
   - Fine controls with ±0.01 increment buttons
   - Direct text input for precise values
   - Preset buttons (50%, 75%, 100%, 125%, 150%)
-- **Transformation Information**: Real-time display of scale, translation, and opacity values
+- **Rotation Controls**: Rotate overlay in any direction
+  - ±1° increment buttons for fine adjustment
+  - Direct degree input
+  - Quick presets (0°, 90°, 180°, 270°)
+  - ±90° buttons for fast rotation
+- **Flip Controls**: Mirror the overlay
+  - Flip Horizontal toggle
+  - Flip Vertical toggle
+- **Transformation Information**: Real-time display of scale, rotation, flip, translation, and opacity values
 - **Copy to Clipboard**: Export transformation parameters
 
 ## Building
@@ -59,10 +67,13 @@ Then press Cmd+R to run. The app should automatically activate and come to the f
 1. Click "Load Base PDF" to load the PDF you're trying to emulate (your target)
 2. Click "Load Overlay PDF" to load your program's PDF output
 3. Adjust the overlay opacity slider to see both PDFs (default 30%)
-4. Adjust scale to match sizes (use fine controls for precision)
-5. Use arrow keys to nudge the overlay into position
-6. Toggle "Show Ruler" for pixel-perfect measurements
-7. Copy the transformation information to adjust your code
+4. Adjust transformations to align:
+   - **Scale**: Match sizes (use fine controls for ±0.01 precision)
+   - **Rotation**: Align orientation (±1° or 90° increments)
+   - **Flip**: Mirror if needed (horizontal/vertical toggles)
+   - **Position**: Use arrow keys to nudge into place (1px or 10px with Shift)
+5. Toggle "Show Ruler" for pixel-perfect measurements (shows pixels)
+6. Copy the transformation information to adjust your code
 
 **See [HELP.md](HELP.md) for detailed workflow examples.**
 

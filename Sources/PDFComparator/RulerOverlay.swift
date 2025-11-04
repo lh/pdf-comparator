@@ -53,8 +53,8 @@ struct HorizontalRuler: View {
 
                 // Draw numbers for major ticks
                 if isMajor && x > 0 {
-                    let text = Text("\(Int(x))")
-                        .font(.system(size: 9))
+                    let text = Text("\(Int(x))px")
+                        .font(.system(size: 8))
                     context.draw(text, at: CGPoint(x: x, y: 5))
                 }
 
@@ -96,8 +96,8 @@ struct VerticalRuler: View {
                     var context = context
                     context.translateBy(x: 5, y: y)
                     context.rotate(by: .degrees(-90))
-                    let text = Text("\(Int(y))")
-                        .font(.system(size: 9))
+                    let text = Text("\(Int(y))px")
+                        .font(.system(size: 8))
                     context.draw(text, at: .zero)
                 }
 

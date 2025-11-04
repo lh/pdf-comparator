@@ -10,13 +10,21 @@ class PDFComparisonViewModel: ObservableObject {
     @Published var overlayOpacity: Double = 0.3
     @Published var overlayOffset: CGSize = .zero
     @Published var overlayScale: Double = 1.0
+    @Published var overlayRotation: Double = 0.0  // in degrees
+    @Published var overlayFlipHorizontal: Bool = false
+    @Published var overlayFlipVertical: Bool = false
 
     @Published var showRuler: Bool = false
 
-    // Transformation vector for output (scale then translate - natural order of operations)
+    // Transformation information for output (order: scale, rotate, flip, translate)
     var transformationVector: String {
-        """
+        let flipH = overlayFlipHorizontal ? "Yes" : "No"
+        let flipV = overlayFlipVertical ? "Yes" : "No"
+        return """
         Scale: \(String(format: "%.3f", overlayScale))
+        Rotation: \(String(format: "%.2f", overlayRotation))°
+        Flip Horizontal: \(flipH)
+        Flip Vertical: \(flipV)
         Translation: (\(String(format: "%.2f", overlayOffset.width)), \(String(format: "%.2f", overlayOffset.height)))
         Opacity: \(String(format: "%.2f", overlayOpacity))
         """
@@ -58,6 +66,9 @@ class PDFComparisonViewModel: ObservableObject {
     func resetTransformation() {
         overlayOffset = .zero
         overlayScale = 1.0
+        overlayRotation = 0.0
+        overlayFlipHorizontal = false
+        overlayFlipVertical = false
         overlayOpacity = 0.3
     }
 }

@@ -15,11 +15,16 @@ struct ComparisonView: View {
             }
 
             // Overlay PDF layer with transformations
+            // Order: scale, rotate, flip, translate
             if let overlayPDF = viewModel.overlayPDF {
                 PDFViewRepresentable(document: overlayPDF)
-                    .opacity(viewModel.overlayOpacity)
-                    .scaleEffect(viewModel.overlayScale)
+                    .scaleEffect(
+                        x: viewModel.overlayScale * (viewModel.overlayFlipHorizontal ? -1 : 1),
+                        y: viewModel.overlayScale * (viewModel.overlayFlipVertical ? -1 : 1)
+                    )
+                    .rotationEffect(.degrees(viewModel.overlayRotation))
                     .offset(viewModel.overlayOffset)
+                    .opacity(viewModel.overlayOpacity)
             }
 
             // Ruler overlay

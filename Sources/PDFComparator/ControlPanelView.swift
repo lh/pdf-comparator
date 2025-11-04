@@ -74,6 +74,68 @@ struct ControlPanelView: View {
 
             Divider()
 
+            // Rotation control
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Overlay Rotation")
+                    .font(.headline)
+
+                // Fine controls with text field
+                HStack(spacing: 8) {
+                    Button("-1°") {
+                        viewModel.overlayRotation -= 1.0
+                    }
+                    .frame(width: 45)
+
+                    TextField("Rotation", value: $viewModel.overlayRotation, format: .number.precision(.fractionLength(2)))
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: 70)
+
+                    Button("+1°") {
+                        viewModel.overlayRotation += 1.0
+                    }
+                    .frame(width: 45)
+
+                    Text("(±1°)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                // Preset rotation buttons
+                HStack {
+                    Button("0°") { viewModel.overlayRotation = 0 }
+                    Button("90°") { viewModel.overlayRotation = 90 }
+                    Button("180°") { viewModel.overlayRotation = 180 }
+                    Button("270°") { viewModel.overlayRotation = 270 }
+                }
+                .buttonStyle(.borderless)
+
+                HStack {
+                    Button("-90°") { viewModel.overlayRotation -= 90 }
+                    Button("+90°") { viewModel.overlayRotation += 90 }
+                }
+                .buttonStyle(.borderless)
+            }
+
+            Divider()
+
+            // Flip controls
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Overlay Flip")
+                    .font(.headline)
+
+                HStack {
+                    Toggle("Flip Horizontal", isOn: $viewModel.overlayFlipHorizontal)
+                    Spacer()
+                }
+
+                HStack {
+                    Toggle("Flip Vertical", isOn: $viewModel.overlayFlipVertical)
+                    Spacer()
+                }
+            }
+
+            Divider()
+
             // Nudge controls
             VStack(alignment: .leading) {
                 Text("Position Offset")
