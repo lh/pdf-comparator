@@ -172,6 +172,10 @@ class KeyHandlerNSView: NSView {
 
     // Allow the view to be hit-tested
     override func hitTest(_ point: NSPoint) -> NSView? {
+        // If in drag crosshair mode, don't intercept mouse events
+        if let viewModel = viewModel, viewModel.dragScaleOrigin && viewModel.showScaleOrigin {
+            return nil
+        }
         // Return self to capture all mouse events in our bounds
         return bounds.contains(point) ? self : nil
     }

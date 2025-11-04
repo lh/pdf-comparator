@@ -30,6 +30,16 @@ class ScaleOriginNSView: NSView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override var acceptsFirstResponder: Bool { true }
+
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        // Only capture events if in drag mode
+        guard let viewModel = viewModel, viewModel.dragScaleOrigin else {
+            return nil
+        }
+        return bounds.contains(point) ? self : nil
+    }
+
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
 
