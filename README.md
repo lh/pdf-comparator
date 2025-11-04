@@ -28,11 +28,14 @@ PDF Comparator helps you adjust the output of a PDF rendering program to match a
   - **±0.01 buttons**: Fine increment/decrement
   - **Text input**: Enter exact values
   - **Presets**: Quick jump to 50%, 75%, 100%, 125%, 150%
+  - **Lock toggle**: Prevent accidental scale changes
 - **Rotation Controls**: Rotate overlay in any direction
-  - ±1° increment buttons for fine adjustment
-  - Direct degree input
-  - Quick presets (0°, 90°, 180°, 270°)
-  - ±90° buttons for fast rotation
+  - **Trackpad**: Two-finger rotate gesture (natural rotation)
+  - **±1° buttons**: Fine increment/decrement
+  - **Text input**: Enter exact angles
+  - **Presets**: Quick jump to 0°, 90°, 180°, 270°
+  - **±90° buttons**: Fast major rotations
+  - **Lock toggle**: Prevent accidental rotation changes
 - **Flip Controls**: Mirror the overlay
   - Flip Horizontal toggle
   - Flip Vertical toggle
@@ -93,11 +96,18 @@ Then press Cmd+R to run. The app should automatically activate and come to the f
 - **Option + Wheel**: Fine scaling control (0.1% steps)
 - **Slider**: Visual adjustment
 - **±0.01 buttons**: Precise increments
+- **Lock toggle**: Prevent accidental changes (disables all scale controls)
+
+### Rotating the Overlay
+- **Trackpad rotate**: Two-finger rotation gesture
+- **±1° / ±90° buttons**: Precise angle adjustments
+- **Text input**: Enter exact angles
+- **Lock toggle**: Prevent accidental changes (disables all rotation controls)
 
 ### Other Controls
 - **Click anywhere**: Focus the window for keyboard shortcuts
 - **Opacity slider**: Adjust transparency
-- **Toggle buttons**: Flip horizontal/vertical, show ruler
+- **Toggle buttons**: Flip horizontal/vertical, show ruler, lock scale/rotation
 
 ## Understanding Points vs Pixels
 

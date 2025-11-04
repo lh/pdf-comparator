@@ -109,23 +109,32 @@ class KeyHandlerNSView: NSView {
     }
 
     override func scrollWheel(with event: NSEvent) {
+        guard let viewModel = viewModel, !viewModel.lockScale else { return }
+
         // Use scroll wheel to scale
         // Hold Option/Alt for fine control
         let scaleFactor: CGFloat = event.modifierFlags.contains(.option) ? 0.001 : 0.01
         let delta = event.scrollingDeltaY * scaleFactor
 
-        if let viewModel = viewModel {
-            let newScale = max(0.5, min(2.0, viewModel.overlayScale + delta))
-            viewModel.overlayScale = newScale
-        }
+        let newScale = max(0.5, min(2.0, viewModel.overlayScale + delta))
+        viewModel.overlayScale = newScale
     }
 
     override func magnify(with event: NSEvent) {
+        guard let viewModel = viewModel, !viewModel.lockScale else { return }
+
         // Trackpad pinch gesture for scaling
-        if let viewModel = viewModel {
-            let newScale = max(0.5, min(2.0, viewModel.overlayScale * (1 + event.magnification)))
-            viewModel.overlayScale = newScale
-        }
+        let newScale = max(0.5, min(2.0, viewModel.overlayScale * (1 + event.magnification)))
+        viewModel.overlayScale = newScale
+    }
+
+    override func rotate(with event: NSEvent) {
+        guard let viewModel = viewModel, !viewModel.lockRotation else { return }
+
+        // Trackpad rotation gesture
+        // Convert radians to degrees
+        let degrees = event.rotation
+        viewModel.overlayRotation += Double(degrees)
     }
 
     override func keyDown(with event: NSEvent) {

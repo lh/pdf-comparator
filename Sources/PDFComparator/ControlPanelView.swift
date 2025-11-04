@@ -26,12 +26,19 @@ struct ControlPanelView: View {
 
             // Scale control
             VStack(alignment: .leading, spacing: 8) {
-                Text("Overlay Scale")
-                    .font(.headline)
+                HStack {
+                    Text("Overlay Scale")
+                        .font(.headline)
+                    Spacer()
+                    Toggle("Lock", isOn: $viewModel.lockScale)
+                        .toggleStyle(.switch)
+                        .controlSize(.mini)
+                }
 
                 // Coarse slider
                 HStack {
                     Slider(value: $viewModel.overlayScale, in: 0.5...2.0)
+                        .disabled(viewModel.lockScale)
                     Text("\(String(format: "%.2f", viewModel.overlayScale))x")
                         .frame(width: 55, alignment: .trailing)
                 }
@@ -42,10 +49,12 @@ struct ControlPanelView: View {
                         viewModel.overlayScale = max(0.5, viewModel.overlayScale - 0.01)
                     }
                     .frame(width: 50)
+                    .disabled(viewModel.lockScale)
 
                     TextField("Scale", value: $viewModel.overlayScale, format: .number.precision(.fractionLength(3)))
                         .textFieldStyle(.roundedBorder)
                         .frame(width: 70)
+                        .disabled(viewModel.lockScale)
                         .onSubmit {
                             // Clamp to valid range
                             viewModel.overlayScale = max(0.5, min(2.0, viewModel.overlayScale))
@@ -55,6 +64,7 @@ struct ControlPanelView: View {
                         viewModel.overlayScale = min(2.0, viewModel.overlayScale + 0.01)
                     }
                     .frame(width: 50)
+                    .disabled(viewModel.lockScale)
 
                     Text("(±0.01)")
                         .font(.caption)
@@ -64,10 +74,15 @@ struct ControlPanelView: View {
                 // Preset scale buttons
                 HStack {
                     Button("50%") { viewModel.overlayScale = 0.5 }
+                        .disabled(viewModel.lockScale)
                     Button("75%") { viewModel.overlayScale = 0.75 }
+                        .disabled(viewModel.lockScale)
                     Button("100%") { viewModel.overlayScale = 1.0 }
+                        .disabled(viewModel.lockScale)
                     Button("125%") { viewModel.overlayScale = 1.25 }
+                        .disabled(viewModel.lockScale)
                     Button("150%") { viewModel.overlayScale = 1.5 }
+                        .disabled(viewModel.lockScale)
                 }
                 .buttonStyle(.borderless)
             }
@@ -76,8 +91,14 @@ struct ControlPanelView: View {
 
             // Rotation control
             VStack(alignment: .leading, spacing: 8) {
-                Text("Overlay Rotation")
-                    .font(.headline)
+                HStack {
+                    Text("Overlay Rotation")
+                        .font(.headline)
+                    Spacer()
+                    Toggle("Lock", isOn: $viewModel.lockRotation)
+                        .toggleStyle(.switch)
+                        .controlSize(.mini)
+                }
 
                 // Fine controls with text field
                 HStack(spacing: 8) {
@@ -85,15 +106,18 @@ struct ControlPanelView: View {
                         viewModel.overlayRotation -= 1.0
                     }
                     .frame(width: 45)
+                    .disabled(viewModel.lockRotation)
 
                     TextField("Rotation", value: $viewModel.overlayRotation, format: .number.precision(.fractionLength(2)))
                         .textFieldStyle(.roundedBorder)
                         .frame(width: 70)
+                        .disabled(viewModel.lockRotation)
 
                     Button("+1°") {
                         viewModel.overlayRotation += 1.0
                     }
                     .frame(width: 45)
+                    .disabled(viewModel.lockRotation)
 
                     Text("(±1°)")
                         .font(.caption)
@@ -103,15 +127,21 @@ struct ControlPanelView: View {
                 // Preset rotation buttons
                 HStack {
                     Button("0°") { viewModel.overlayRotation = 0 }
+                        .disabled(viewModel.lockRotation)
                     Button("90°") { viewModel.overlayRotation = 90 }
+                        .disabled(viewModel.lockRotation)
                     Button("180°") { viewModel.overlayRotation = 180 }
+                        .disabled(viewModel.lockRotation)
                     Button("270°") { viewModel.overlayRotation = 270 }
+                        .disabled(viewModel.lockRotation)
                 }
                 .buttonStyle(.borderless)
 
                 HStack {
                     Button("-90°") { viewModel.overlayRotation -= 90 }
+                        .disabled(viewModel.lockRotation)
                     Button("+90°") { viewModel.overlayRotation += 90 }
+                        .disabled(viewModel.lockRotation)
                 }
                 .buttonStyle(.borderless)
             }

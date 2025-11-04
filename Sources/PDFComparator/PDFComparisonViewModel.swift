@@ -15,6 +15,8 @@ class PDFComparisonViewModel: ObservableObject {
     @Published var overlayFlipVertical: Bool = false
 
     @Published var showRuler: Bool = false
+    @Published var lockScale: Bool = false
+    @Published var lockRotation: Bool = false
 
     // Transformation information for output (order: scale, rotate, flip, translate)
     // Note: macOS uses points where 1 point = 1 pixel on non-retina, 2 pixels on retina
