@@ -32,7 +32,8 @@ class PDFComparisonViewModel: ObservableObject {
     @Published var showReloadAlert: Bool = false
     private var basePDFURL: URL?
     private var overlayPDFURL: URL?
-    private var fileMonitors: [DispatchSourceFileSystemObject] = []
+    private var baseFileMonitor: DispatchSourceFileSystemObject?
+    private var overlayFileMonitor: DispatchSourceFileSystemObject?
     private var pendingReloadType: ReloadType?
 
     enum ReloadType {
@@ -116,9 +117,15 @@ class PDFComparisonViewModel: ObservableObject {
     }
 
     private func setupFileMonitor(for url: URL, type: ReloadType) {
-        // Cancel existing monitors
-        fileMonitors.forEach { $0.cancel() }
-        fileMonitors.removeAll()
+        // Cancel existing monitor for this type only
+        switch type {
+        case .base:
+            baseFileMonitor?.cancel()
+            baseFileMonitor = nil
+        case .overlay:
+            overlayFileMonitor?.cancel()
+            overlayFileMonitor = nil
+        }
 
         let fileDescriptor = open(url.path, O_EVTONLY)
         guard fileDescriptor >= 0 else { return }
@@ -142,7 +149,14 @@ class PDFComparisonViewModel: ObservableObject {
         }
 
         source.resume()
-        fileMonitors.append(source)
+
+        // Store monitor for this type
+        switch type {
+        case .base:
+            baseFileMonitor = source
+        case .overlay:
+            overlayFileMonitor = source
+        }
     }
 
     func reloadPDF() {
@@ -152,10 +166,14 @@ class PDFComparisonViewModel: ObservableObject {
         case .base:
             if let url = basePDFURL {
                 basePDF = PDFDocument(url: url)
+                // Re-establish monitoring after reload
+                setupFileMonitor(for: url, type: .base)
             }
         case .overlay:
             if let url = overlayPDFURL {
                 overlayPDF = PDFDocument(url: url)
+                // Re-establish monitoring after reload
+                setupFileMonitor(for: url, type: .overlay)
             }
         }
 
@@ -174,7 +192,8 @@ class PDFComparisonViewModel: ObservableObject {
     }
 
     deinit {
-        fileMonitors.forEach { $0.cancel() }
+        baseFileMonitor?.cancel()
+        overlayFileMonitor?.cancel()
     }
 
     func nudge(dx: CGFloat, dy: CGFloat) {
